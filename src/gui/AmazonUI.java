@@ -1,9 +1,11 @@
 package gui;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -24,10 +26,10 @@ public class AmazonUI extends JFrame {
 	public static BufferedImage Queen_White;
 	public static BufferedImage Queen_Black;
 
-	public AmazonUI(Board board) {
+	public AmazonUI(Board board, MouseListener listener) {
 		super("MainFrame");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setMinimumSize(new Dimension((int) (10.5 * AmazonUI.SQUARESIZE + 1) + 16, (int) (10.5 * AmazonUI.SQUARESIZE + 1) + 41));
+		setMinimumSize(new Dimension((int) (10.5 * 30 + 1) + 16, (int) (10.5 * 30 + 1) + 41));
 		setResizable(true);
 
 		addComponentListener(new ComponentListener() {
@@ -67,8 +69,10 @@ public class AmazonUI extends JFrame {
 			ex.printStackTrace();
 		}
 
+		setLayout(new BorderLayout());
 		boardPanel = new AmazonBoardPanel(board);
-		add(boardPanel);
+		boardPanel.addMouseListener(listener);
+		add(boardPanel, BorderLayout.CENTER);
 
 		// addMenuBar(this);
 		pack();

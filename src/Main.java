@@ -1,10 +1,11 @@
-import gui.AmazonUI;
-import model.Board;
+import logic.AmazonLogic;
 
 public class Main {
 
 	public static void main(String[] args) {
-		Board board = new Board();
-		AmazonUI ui = new AmazonUI(board);
+		new AmazonLogic();
+
+		// Board board = new Board();
+		// AmazonUI ui = new AmazonUI(board);
 	}
 }
