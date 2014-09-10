@@ -1,7 +1,10 @@
+import gui.AmazonUI;
+import model.Board;
 
 public class Main {
 
-	public static void main(String[] args){
-		
+	public static void main(String[] args) {
+		Board board = new Board();
+		AmazonUI ui = new AmazonUI(board);
 	}
 }
