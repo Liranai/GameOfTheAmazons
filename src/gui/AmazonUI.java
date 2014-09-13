@@ -25,6 +25,7 @@ public class AmazonUI extends JFrame {
 
 	public static BufferedImage Queen_White;
 	public static BufferedImage Queen_Black;
+	public static BufferedImage Arrow;
 
 	public AmazonUI(Board board, MouseListener listener) {
 		super("MainFrame");
@@ -62,9 +63,9 @@ public class AmazonUI extends JFrame {
 
 		try {
 			// TODO: load transparent files
-			Queen_White = ImageIO.read(new File("E:\\Workspace\\Amazons\\img-thing.jpg"));
-			// Queen_Black = ImageIO.read(new
-			// File("E:\\Workspace\\Amazons\\queen_black.png"));
+			Queen_White = ImageIO.read(new File("white_queen.gif"));
+			Queen_Black = ImageIO.read(new File("black_queen.gif"));
+			Arrow = ImageIO.read(new File("arrowCCW.gif"));
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
