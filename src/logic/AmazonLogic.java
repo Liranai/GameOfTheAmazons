@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import model.Board;
+import model.Move;
 import model.Queen;
 
 public class AmazonLogic implements MouseListener {
@@ -14,6 +15,7 @@ public class AmazonLogic implements MouseListener {
 	private Board board;
 	private AmazonUI GUI;
 	private Queen selectedQueen;
+	private Point target;
 
 	public AmazonLogic() {
 		board = new Board();
@@ -32,38 +34,54 @@ public class AmazonLogic implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent me) {
-		selectedQueen = board.hasQueen(new Point((int) (Math.floor((me.getX() - (0.5 * AmazonUI.SQUARESIZE)) / AmazonUI.SQUARESIZE)), (int) (Math.floor(me.getY() / AmazonUI.SQUARESIZE))));
+		Point point = new Point((int) (Math.floor((me.getX() - (0.5 * AmazonUI.SQUARESIZE)) / AmazonUI.SQUARESIZE)), (int) (Math.floor(me.getY() / AmazonUI.SQUARESIZE)));
 
-		if (selectedQueen != null) {
-			board.setHighlight(selectedQueen.getPosition());
+		if (selectedQueen == null) {
+			if (board.hasQueen(point) != null) {
+				selectedQueen = board.hasQueen(point);
+				target = null;
+				board.setTarget(null);
+				board.setHighlight(point);
+			}
+		} else if (selectedQueen != null && board.hasQueen(point) != null) {
+			selectedQueen = board.hasQueen(point);
+			target = null;
+			board.setTarget(null);
+			board.setHighlight(point);
 		} else {
-			board.setHighlight(null);
+			if (board.isEmpty(point)) {
+				if (target != null) {
+					Move move = new Move(selectedQueen, target, point);
+					if (move.validate(board)) {
+						board.move(selectedQueen, target, point);
+						selectedQueen = null;
+						target = null;
+						board.setHighlight(null);
+						board.setTarget(null);
+					}
+				} else {
+					target = point;
+					board.setTarget(point);
+				}
+			}
 		}
 		GUI.repaint();
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 }
