@@ -16,6 +16,7 @@ public class AmazonLogic implements MouseListener {
 	private AmazonUI GUI;
 	private Queen selectedQueen;
 	private Point target;
+	private boolean currentTurn = true;
 
 	public AmazonLogic() {
 		board = new Board();
@@ -37,17 +38,19 @@ public class AmazonLogic implements MouseListener {
 		Point point = new Point((int) (Math.floor((me.getX() - (0.5 * AmazonUI.SQUARESIZE)) / AmazonUI.SQUARESIZE)), (int) (Math.floor(me.getY() / AmazonUI.SQUARESIZE)));
 
 		if (selectedQueen == null) {
-			if (board.hasQueen(point) != null) {
+			if (board.hasQueen(point) != null && board.hasQueen(point).isColor()== currentTurn) {
 				selectedQueen = board.hasQueen(point);
 				target = null;
 				board.setTarget(null);
 				board.setHighlight(point);
+				currentTurn = !currentTurn;
 			}
-		} else if (selectedQueen != null && board.hasQueen(point) != null) {
+		} else if (selectedQueen != null && board.hasQueen(point) != null && selectedQueen.isColor()== currentTurn) {
 			selectedQueen = board.hasQueen(point);
 			target = null;
 			board.setTarget(null);
 			board.setHighlight(point);
+			currentTurn = !currentTurn;
 		} else {
 			if (board.isEmpty(point)) {
 				if (target != null) {

@@ -22,7 +22,8 @@ public class AmazonUI extends JFrame {
 	private static final long serialVersionUID = -2399200433217264450L;
 	private JPanel boardPanel;
 	public static int SQUARESIZE = 55;
-
+	
+	public static BufferedImage Foot_steps;
 	public static BufferedImage Queen_White;
 	public static BufferedImage Queen_Black;
 	public static BufferedImage Arrow;
@@ -63,9 +64,10 @@ public class AmazonUI extends JFrame {
 
 		try {
 			// TODO: load transparent files
+			Foot_steps = ImageIO.read(new File("footsteps3.gif"));
 			Queen_White = ImageIO.read(new File("white_queen.gif"));
 			Queen_Black = ImageIO.read(new File("black_queen.gif"));
-			Arrow = ImageIO.read(new File("arrowCCW.gif"));
+			Arrow = ImageIO.read(new File("arrow.gif"));
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}

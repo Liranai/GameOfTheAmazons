@@ -77,11 +77,11 @@ public class Board {
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
 				if ((i + j) % 2 == 0) {
-					// g2.setColor(Color.lightGray);
-					g2.setColor(new Color(153, 0, 153));
+					g2.setColor(Color.lightGray);
+					//g2.setColor(new Color(153, 0, 153));
 				} else {
-					// g2.setColor(Color.darkGray);
-					g2.setColor(new Color(255, 51, 153));
+					g2.setColor(Color.darkGray);
+					//g2.setColor(new Color(255, 51, 153));
 				}
 				g2.fill(new Rectangle2D.Double((int) (0.5 * AmazonUI.SQUARESIZE) + i * AmazonUI.SQUARESIZE + 1, j * AmazonUI.SQUARESIZE + 1, AmazonUI.SQUARESIZE - 1, AmazonUI.SQUARESIZE - 1));
 
@@ -149,8 +149,10 @@ public class Board {
 		}
 
 		if (target != null) {
-			g2.setColor(Color.red);
-			g2.fill(new Rectangle2D.Double((int) (0.5 * AmazonUI.SQUARESIZE) + target.x * AmazonUI.SQUARESIZE + 1, target.y * AmazonUI.SQUARESIZE + 1, AmazonUI.SQUARESIZE - 1, AmazonUI.SQUARESIZE - 1));
+			g2.drawImage(AmazonUI.Foot_steps.getScaledInstance((int) (AmazonUI.SQUARESIZE * .80), (int) (AmazonUI.SQUARESIZE * .8), Image.SCALE_SMOOTH),
+					target.x * AmazonUI.SQUARESIZE + 33,target.y * AmazonUI.SQUARESIZE + 7, null);
+			//g2.setColor(Color.black);
+			//g2.fill(new Rectangle2D.Double((int) (0.5 * AmazonUI.SQUARESIZE) + target.x * AmazonUI.SQUARESIZE + 1, target.y * AmazonUI.SQUARESIZE + 1, AmazonUI.SQUARESIZE - 1, AmazonUI.SQUARESIZE - 1));
 		}
 
 		// TODO: Make image scale

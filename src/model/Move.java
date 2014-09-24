@@ -55,7 +55,7 @@ public class Move {
 
 		for (int i = 1; i < Math.max(absx, absy); i++) {
 			if (board.getField()[(int) (start.x + i * motionx)][(int) (start.y + i * motiony)] != GameObject.Empty) {
-				System.out.println((char) ((start.y + i * motiony) + 97) + "" + (10 - (start.x + i * motionx)) + " was "
+				System.out.println((char) ((start.x + i * motionx) + 97) + "" + (10 - (start.y + i * motiony)) + " was "
 						+ board.getField()[(int) (start.x + i * motionx)][(int) (start.y + i * motiony)]);
 				return false;
 			}
