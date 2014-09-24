@@ -14,7 +14,6 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import logic.AmazonBoardPanel;
 import model.Board;
 
 public class AmazonUI extends JFrame {

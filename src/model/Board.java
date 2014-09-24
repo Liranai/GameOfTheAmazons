@@ -77,43 +77,17 @@ public class Board {
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
 				if ((i + j) % 2 == 0) {
-					g2.setColor(Color.lightGray);
-					//g2.setColor(new Color(153, 0, 153));
+					// g2.setColor(Color.lightGray);
+					g2.setColor(new Color(153, 0, 153));
 				} else {
-					g2.setColor(Color.darkGray);
-					//g2.setColor(new Color(255, 51, 153));
+					// g2.setColor(Color.darkGray);
+					g2.setColor(new Color(255, 51, 153));
 				}
 				g2.fill(new Rectangle2D.Double((int) (0.5 * AmazonUI.SQUARESIZE) + i * AmazonUI.SQUARESIZE + 1, j * AmazonUI.SQUARESIZE + 1, AmazonUI.SQUARESIZE - 1, AmazonUI.SQUARESIZE - 1));
 
 				if (field[i][j] == GameObject.Arrow) {
 					g2.drawImage(AmazonUI.Arrow.getScaledInstance((int) (AmazonUI.SQUARESIZE * .40), (int) (AmazonUI.SQUARESIZE * .8), Image.SCALE_SMOOTH),
 							(int) ((0.5 * AmazonUI.SQUARESIZE) + (i + 0.35) * AmazonUI.SQUARESIZE), (int) ((j + 0.1) * AmazonUI.SQUARESIZE + 1), null);
-					// g2.setColor(Color.black);
-					//
-					// Polygon p = new Polygon();
-					// p.addPoint((int) ((0.5 * AmazonUI.SQUARESIZE) + i *
-					// AmazonUI.SQUARESIZE + (AmazonUI.SQUARESIZE * 0.4)), (int)
-					// (j * AmazonUI.SQUARESIZE + (AmazonUI.SQUARESIZE * 0.2)));
-					// p.addPoint((int) ((0.5 * AmazonUI.SQUARESIZE) + i *
-					// AmazonUI.SQUARESIZE + (AmazonUI.SQUARESIZE * 0.6)), (int)
-					// (j * AmazonUI.SQUARESIZE + (AmazonUI.SQUARESIZE * 0.2)));
-					// p.addPoint((int) ((0.5 * AmazonUI.SQUARESIZE) + i *
-					// AmazonUI.SQUARESIZE + (AmazonUI.SQUARESIZE * 0.6)), (int)
-					// (j * AmazonUI.SQUARESIZE + (AmazonUI.SQUARESIZE * 0.5)));
-					// p.addPoint((int) ((0.5 * AmazonUI.SQUARESIZE) + i *
-					// AmazonUI.SQUARESIZE + (AmazonUI.SQUARESIZE * 0.8)), (int)
-					// (j * AmazonUI.SQUARESIZE + (AmazonUI.SQUARESIZE * 0.5)));
-					// p.addPoint((int) ((0.5 * AmazonUI.SQUARESIZE) + i *
-					// AmazonUI.SQUARESIZE + (AmazonUI.SQUARESIZE * 0.5)), (int)
-					// (j * AmazonUI.SQUARESIZE + (AmazonUI.SQUARESIZE * 0.8)));
-					// p.addPoint((int) ((0.5 * AmazonUI.SQUARESIZE) + i *
-					// AmazonUI.SQUARESIZE + (AmazonUI.SQUARESIZE * 0.2)), (int)
-					// (j * AmazonUI.SQUARESIZE + (AmazonUI.SQUARESIZE * 0.5)));
-					// p.addPoint((int) ((0.5 * AmazonUI.SQUARESIZE) + i *
-					// AmazonUI.SQUARESIZE + (AmazonUI.SQUARESIZE * 0.4)), (int)
-					// (j * AmazonUI.SQUARESIZE + (AmazonUI.SQUARESIZE * 0.5)));
-					//
-					// g2.fill(p);
 				}
 
 				if (field[i][j] == GameObject.AmazonWhite) {
@@ -149,10 +123,13 @@ public class Board {
 		}
 
 		if (target != null) {
-			g2.drawImage(AmazonUI.Foot_steps.getScaledInstance((int) (AmazonUI.SQUARESIZE * .80), (int) (AmazonUI.SQUARESIZE * .8), Image.SCALE_SMOOTH),
-					target.x * AmazonUI.SQUARESIZE + 33,target.y * AmazonUI.SQUARESIZE + 7, null);
-			//g2.setColor(Color.black);
-			//g2.fill(new Rectangle2D.Double((int) (0.5 * AmazonUI.SQUARESIZE) + target.x * AmazonUI.SQUARESIZE + 1, target.y * AmazonUI.SQUARESIZE + 1, AmazonUI.SQUARESIZE - 1, AmazonUI.SQUARESIZE - 1));
+			g2.drawImage(AmazonUI.Foot_steps.getScaledInstance((int) (AmazonUI.SQUARESIZE * .80), (int) (AmazonUI.SQUARESIZE * .8), Image.SCALE_SMOOTH), target.x * AmazonUI.SQUARESIZE + 33, target.y
+					* AmazonUI.SQUARESIZE + 7, null);
+			// g2.setColor(Color.black);
+			// g2.fill(new Rectangle2D.Double((int) (0.5 * AmazonUI.SQUARESIZE)
+			// + target.x * AmazonUI.SQUARESIZE + 1, target.y *
+			// AmazonUI.SQUARESIZE + 1, AmazonUI.SQUARESIZE - 1,
+			// AmazonUI.SQUARESIZE - 1));
 		}
 
 		// TODO: Make image scale

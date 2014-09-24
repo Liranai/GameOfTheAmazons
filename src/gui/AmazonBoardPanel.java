@@ -1,6 +1,4 @@
-package logic;
-
-import gui.AmazonUI;
+package gui;
 
 import java.awt.Color;
 import java.awt.Dimension;

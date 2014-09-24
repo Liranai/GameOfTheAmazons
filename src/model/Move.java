@@ -39,7 +39,7 @@ public class Move {
 			System.out.println("Queen went past something");
 			return false;
 		}
-		if (!checkMove(board, target, arrow)) {
+		if (!checkMove(board, target, arrow, queen.getPosition())) {
 			System.out.println("Arrow went past something");
 			return false;
 		}
@@ -60,7 +60,25 @@ public class Move {
 				return false;
 			}
 		}
+		return true;
+	}
 
+	private boolean checkMove(Board board, Point start, Point target, Point ignore) {
+		double absx = Math.abs(target.x - start.x) + 0.001;
+		double absy = Math.abs(target.y - start.y) + 0.001;
+
+		int motionx = (int) Math.round((target.x - start.x) / absx);
+		int motiony = (int) Math.round((target.y - start.y) / absy);
+
+		for (int i = 1; i < Math.max(absx, absy); i++) {
+			if (start.x + i * motionx == ignore.x && start.y + i * motiony == ignore.y)
+				continue;
+			if (board.getField()[(int) (start.x + i * motionx)][(int) (start.y + i * motiony)] != GameObject.Empty) {
+				System.out.println((char) ((start.x + i * motionx) + 97) + "" + (10 - (start.y + i * motiony)) + " was "
+						+ board.getField()[(int) (start.x + i * motionx)][(int) (start.y + i * motiony)]);
+				return false;
+			}
+		}
 		return true;
 	}
 }
