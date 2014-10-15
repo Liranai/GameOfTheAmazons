@@ -14,13 +14,13 @@ import model.GameObject;
 import model.Move;
 import model.Queen;
 
-@Getter
 public class AmazonLogic extends Observable implements MouseListener {
 
 	private Board board;
 	private AmazonUI GUI;
 	private Queen selectedQueen;
 	private Point target;
+	@Getter
 	private boolean currentTurn;
 
 	private int[][] Directions = { { -1, -1 }, { -1, 0 }, { -1, 1 }, { 0, -1 }, { 0, 1 }, { 1, -1 }, { 1, 0 }, { 1, 1 } };
@@ -44,6 +44,10 @@ public class AmazonLogic extends Observable implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent me) {
+		if(currentTurn == false){
+			new random(board, false);
+			currentTurn = !currentTurn;
+		}
 		Point point = new Point((int) (Math.floor((me.getX() - (0.5 * AmazonUI.SQUARESIZE)) / AmazonUI.SQUARESIZE)), (int) (Math.floor(me.getY() / AmazonUI.SQUARESIZE)));
 
 		if (selectedQueen == null) {
@@ -52,14 +56,28 @@ public class AmazonLogic extends Observable implements MouseListener {
 				target = null;
 				board.setTarget(null);
 				board.setHighlight(point);
-				currentTurn = !currentTurn;
 			}
-		} else if (selectedQueen != null && board.hasQueen(point) != null && selectedQueen.isColor() == currentTurn) {
+		} else if (selectedQueen != null && board.hasQueen(point) != null && selectedQueen.isColor() == currentTurn && board.hasQueen(point).isColor() == currentTurn && selectedQueen != board.hasQueen(point)) {
 			selectedQueen = board.hasQueen(point);
 			target = null;
 			board.setTarget(null);
 			board.setHighlight(point);
-			currentTurn = !currentTurn;
+		} else if (selectedQueen != null && target != null && target.equals(point) && selectedQueen.isColor() == currentTurn) {
+			target = null;
+			board.setTarget(null);
+		} else if (selectedQueen != null && target != null && point.equals(selectedQueen.getPosition())) {
+			Move move = new Move(selectedQueen, target, point);
+			if (move.validate(board)) {
+				board.move(selectedQueen, target, point);
+				selectedQueen = null;
+				target = null;
+				board.setHighlight(null);
+				board.setTarget(null);
+				currentTurn = !currentTurn;
+				if (checkMoves()) {
+					System.out.println("Game over!");
+				}
+			}
 		} else {
 			if (board.isEmpty(point)) {
 				if (target != null) {
@@ -74,11 +92,10 @@ public class AmazonLogic extends Observable implements MouseListener {
 						target = null;
 						board.setHighlight(null);
 						board.setTarget(null);
+						currentTurn = !currentTurn;
 						if (checkMoves()) {
 							System.out.println("Game over!");
 						}
-						setChanged();
-						notifyObservers();
 					}
 				} else {
 					target = point;

@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 
 import model.Board;
 
+
 public class AmazonUI extends JFrame {
 
 	private static final long serialVersionUID = -2399200433217264450L;

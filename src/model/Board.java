@@ -58,7 +58,11 @@ public class Board {
 	}
 
 	public boolean isEmpty(Point p) {
-		return (field[p.x][p.y] == GameObject.Empty);
+		boolean answer = true;
+		if(p.getX() >= 0 && p.getX() <=9 && p.getY() >=0 && p.getY() <=9){
+			answer = field[p.x][p.y] == GameObject.Empty;
+		}else{answer = false;}
+		return answer;
 	}
 
 	public void move(Queen queen, Point target, Point arrow) {
