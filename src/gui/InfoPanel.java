@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -13,13 +14,15 @@ import javax.swing.JPanel;
 
 import logic.AmazonLogic;
 
-public class TurnPanel extends JPanel implements Observer {
+public class InfoPanel extends JPanel implements Observer {
 
 	private static final long serialVersionUID = -7102795064597828847L;
 	private boolean currentTurn;
+	private ArrayList<String> information;
 
-	public TurnPanel() {
+	public InfoPanel() {
 		setPreferredSize(new Dimension((int) (3 * AmazonUI.SQUARESIZE + 1), (int) (9.5 * AmazonUI.SQUARESIZE + 1)));
+		information = new ArrayList<String>();
 		currentTurn = true;
 	}
 

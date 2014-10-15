@@ -1,13 +1,21 @@
-import gui.TurnPanel;
+import gui.InfoPanel;
 import logic.AmazonLogic;
+import ai.ArtificialIntelligence;
+import ai.RandomAI;
 
 public class Main {
 
 	public static void main(String[] args) {
-		TurnPanel panel = new TurnPanel();
+		InfoPanel panel = new InfoPanel();
+		ArtificialIntelligence selectedAI = new RandomAI(false);
 
-		AmazonLogic logic = new AmazonLogic(panel);
+		AmazonLogic logic;
+		if (selectedAI != null)
+			logic = new AmazonLogic(panel, selectedAI);
+		else
+			logic = new AmazonLogic(panel);
 		logic.addObserver(panel);
+		logic.addObserver(selectedAI);
 
 		// Board board = new Board();
 		// AmazonUI ui = new AmazonUI(board);

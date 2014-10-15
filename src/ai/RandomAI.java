@@ -1,28 +1,48 @@
-package logic;
+package ai;
 
 import java.awt.Point;
+import java.util.Observable;
 import java.util.Vector;
 
+import logic.AmazonLogic;
 import model.Board;
+import model.Move;
 import model.Queen;
 
-public class random {
+public class RandomAI extends ArtificialIntelligence {
+
 	private Vector<Queen> queens = new Vector<Queen>();
 	private Vector<Point> moveLocations = new Vector<Point>();
 	private Vector<Point> shootLocations = new Vector<Point>();
 	private Board board;
 
-	public random(Board board, boolean color) {
-		this.board = board;
+	public RandomAI(boolean color) {
+		super(color);
+	}
+
+	public Move getMove() {
 		getQueens(color);
 		Queen chosenQueen = fillMoveLocations();
 		Point target = chooseMove();
 		fillShootLocations(target, chosenQueen);
 		Point shootTarget = shoot();
-		board.move(chosenQueen, target, shootTarget);
+
+		return new Move(chosenQueen, target, shootTarget);
 	}
 
-	public void getQueens(boolean color) {
+	@Override
+	public void update(Observable obser, Object obj) {
+		this.board = ((AmazonLogic) obser).getBoard();
+		if (((AmazonLogic) obser).isCurrentTurn() == color) {
+			Move move = getMove();
+			move.validate(board);
+			board.move(move);
+			((AmazonLogic) obser).setCurrentTurn(!color);
+		}
+		((AmazonLogic) obser).getGUI().repaint();
+	}
+
+	private void getQueens(boolean color) {
 		Vector<Queen> tempqueens = board.getQueens();
 		for (int i = 0; i < tempqueens.size(); i++) {
 			int cntr = 0;
@@ -34,7 +54,7 @@ public class random {
 		}
 	}
 
-	public Queen fillMoveLocations() {
+	private Queen fillMoveLocations() {
 		Queen chosenQueen = null;
 		boolean moveMade = false;
 		while (moveMade == false) {
@@ -113,12 +133,12 @@ public class random {
 		return chosenQueen;
 	}
 
-	public Point chooseMove() {
+	private Point chooseMove() {
 		Point target = moveLocations.get((int) (Math.random() * moveLocations.size()));
 		return target;
 	}
 
-	public void fillShootLocations(Point move, Queen chosenQueen) {
+	private void fillShootLocations(Point move, Queen chosenQueen) {
 		Point nextPoint = new Point(0, 0);
 		nextPoint.setLocation(move.getX(), move.getY() + 1.0);
 		while (board.isEmpty(nextPoint) == true || (nextPoint.getX() == chosenQueen.getPosition().getX() && nextPoint.getY() == chosenQueen.getPosition().getY())) {
@@ -178,8 +198,9 @@ public class random {
 		}
 	}
 
-	public Point shoot() {
+	private Point shoot() {
 		Point target = shootLocations.get((int) (Math.random() * shootLocations.size()));
 		return target;
 	}
+
 }

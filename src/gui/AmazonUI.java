@@ -16,7 +16,6 @@ import javax.swing.JPanel;
 
 import model.Board;
 
-
 public class AmazonUI extends JFrame {
 
 	private static final long serialVersionUID = -2399200433217264450L;
@@ -28,7 +27,7 @@ public class AmazonUI extends JFrame {
 	public static BufferedImage Queen_Black;
 	public static BufferedImage Arrow;
 
-	public AmazonUI(Board board, TurnPanel panel, MouseListener listener) {
+	public AmazonUI(Board board, InfoPanel panel, MouseListener listener) {
 		super("MainFrame");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setMinimumSize(new Dimension((int) (10.5 * 30 + 1) + 16, (int) (10.5 * 30 + 1) + 41));

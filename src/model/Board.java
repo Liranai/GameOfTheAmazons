@@ -59,9 +59,11 @@ public class Board {
 
 	public boolean isEmpty(Point p) {
 		boolean answer = true;
-		if(p.getX() >= 0 && p.getX() <=9 && p.getY() >=0 && p.getY() <=9){
+		if (p.getX() >= 0 && p.getX() <= 9 && p.getY() >= 0 && p.getY() <= 9) {
 			answer = field[p.x][p.y] == GameObject.Empty;
-		}else{answer = false;}
+		} else {
+			answer = false;
+		}
 		return answer;
 	}
 
@@ -74,6 +76,17 @@ public class Board {
 			field[queen.getPosition().x][queen.getPosition().y] = GameObject.AmazonBlack;
 		field[arrow.x][arrow.y] = GameObject.Arrow;
 		arrows.add(arrow);
+	}
+
+	public void move(Move move) {
+		field[move.getQueen().getPosition().x][move.getQueen().getPosition().y] = GameObject.Empty;
+		move.getQueen().move(move.getTarget());
+		if (move.getQueen().isColor())
+			field[move.getQueen().getPosition().x][move.getQueen().getPosition().y] = GameObject.AmazonWhite;
+		else
+			field[move.getQueen().getPosition().x][move.getQueen().getPosition().y] = GameObject.AmazonBlack;
+		field[move.getArrow().x][move.getArrow().y] = GameObject.Arrow;
+		arrows.addElement(move.getArrow());
 	}
 
 	public void draw(Graphics2D g2) {
