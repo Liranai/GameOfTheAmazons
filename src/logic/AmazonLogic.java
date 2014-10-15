@@ -1,17 +1,21 @@
 package logic;
 
 import gui.AmazonUI;
+import gui.TurnPanel;
 
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Observable;
 
+import lombok.Getter;
 import model.Board;
 import model.GameObject;
 import model.Move;
 import model.Queen;
 
-public class AmazonLogic implements MouseListener {
+@Getter
+public class AmazonLogic extends Observable implements MouseListener {
 
 	private Board board;
 	private AmazonUI GUI;
@@ -21,7 +25,7 @@ public class AmazonLogic implements MouseListener {
 
 	private int[][] Directions = { { -1, -1 }, { -1, 0 }, { -1, 1 }, { 0, -1 }, { 0, 1 }, { 1, -1 }, { 1, 0 }, { 1, 1 } };
 
-	public AmazonLogic() {
+	public AmazonLogic(TurnPanel panel) {
 		board = new Board();
 		board.addQueen(new Queen(new Point(0, 3), false));
 		board.addQueen(new Queen(new Point(3, 0), false));
@@ -35,7 +39,7 @@ public class AmazonLogic implements MouseListener {
 
 		currentTurn = true;
 
-		GUI = new AmazonUI(board, this);
+		GUI = new AmazonUI(board, panel, this);
 	}
 
 	@Override
@@ -73,6 +77,8 @@ public class AmazonLogic implements MouseListener {
 						if (checkMoves()) {
 							System.out.println("Game over!");
 						}
+						setChanged();
+						notifyObservers();
 					}
 				} else {
 					target = point;

@@ -21,13 +21,13 @@ public class AmazonUI extends JFrame {
 	private static final long serialVersionUID = -2399200433217264450L;
 	private JPanel boardPanel;
 	public static int SQUARESIZE = 55;
-	
+
 	public static BufferedImage Foot_steps;
 	public static BufferedImage Queen_White;
 	public static BufferedImage Queen_Black;
 	public static BufferedImage Arrow;
 
-	public AmazonUI(Board board, MouseListener listener) {
+	public AmazonUI(Board board, TurnPanel panel, MouseListener listener) {
 		super("MainFrame");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setMinimumSize(new Dimension((int) (10.5 * 30 + 1) + 16, (int) (10.5 * 30 + 1) + 41));
@@ -66,7 +66,7 @@ public class AmazonUI extends JFrame {
 			Foot_steps = ImageIO.read(new File("footsteps3.gif"));
 			Queen_White = ImageIO.read(new File("white_queen.gif"));
 			Queen_Black = ImageIO.read(new File("black_queen.gif"));
-			Arrow = ImageIO.read(new File("arrow.gif"));
+			Arrow = ImageIO.read(new File("arrowCCW.gif"));
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
@@ -75,6 +75,7 @@ public class AmazonUI extends JFrame {
 		boardPanel = new AmazonBoardPanel(board);
 		boardPanel.addMouseListener(listener);
 		add(boardPanel, BorderLayout.CENTER);
+		add(panel, BorderLayout.EAST);
 
 		// addMenuBar(this);
 		pack();

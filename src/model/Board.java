@@ -123,8 +123,8 @@ public class Board {
 		}
 
 		if (target != null) {
-			g2.drawImage(AmazonUI.Foot_steps.getScaledInstance((int) (AmazonUI.SQUARESIZE * .80), (int) (AmazonUI.SQUARESIZE * .8), Image.SCALE_SMOOTH), target.x * AmazonUI.SQUARESIZE + 33, target.y
-					* AmazonUI.SQUARESIZE + 7, null);
+			g2.drawImage(AmazonUI.Foot_steps.getScaledInstance((int) (AmazonUI.SQUARESIZE * .80), (int) (AmazonUI.SQUARESIZE * .80), Image.SCALE_SMOOTH),
+					(int) ((target.x * AmazonUI.SQUARESIZE) + (0.62 * AmazonUI.SQUARESIZE)), (int) ((target.y * AmazonUI.SQUARESIZE) + (0.12 * AmazonUI.SQUARESIZE)), null);
 			// g2.setColor(Color.black);
 			// g2.fill(new Rectangle2D.Double((int) (0.5 * AmazonUI.SQUARESIZE)
 			// + target.x * AmazonUI.SQUARESIZE + 1, target.y *
