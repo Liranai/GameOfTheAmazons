@@ -26,12 +26,15 @@ public class RandomAI extends ArtificialIntelligence {
 		Point target = chooseMove();
 		fillShootLocations(target, chosenQueen);
 		Point shootTarget = shoot();
-
 		return new Move(chosenQueen, target, shootTarget);
 	}
 
 	@Override
 	public void update(Observable obser, Object obj) {
+		queens = new Vector<Queen>();
+		moveLocations = new Vector<Point>();
+		shootLocations = new Vector<Point>();
+
 		this.board = ((AmazonLogic) obser).getBoard();
 		if (((AmazonLogic) obser).isCurrentTurn() == color) {
 			Move move = getMove();
@@ -200,6 +203,7 @@ public class RandomAI extends ArtificialIntelligence {
 
 	private Point shoot() {
 		Point target = shootLocations.get((int) (Math.random() * shootLocations.size()));
+		
 		return target;
 	}
 
