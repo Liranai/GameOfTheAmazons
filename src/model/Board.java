@@ -11,6 +11,7 @@ import java.awt.Point;
 import java.awt.geom.Rectangle2D;
 import java.util.Vector;
 
+import logic.AmazonLogic;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -36,6 +37,12 @@ public class Board {
 				field[i][j] = GameObject.Empty;
 			}
 		}
+	}
+
+	public Board(GameObject[][] field, Vector<Point> arrows, Vector<Queen> queens) {
+		this.field = field;
+		this.arrows = arrows;
+		this.queens = queens;
 	}
 
 	public void addQueen(Queen q) {
@@ -87,6 +94,64 @@ public class Board {
 			field[move.getQueen().getPosition().x][move.getQueen().getPosition().y] = GameObject.AmazonBlack;
 		field[move.getArrow().x][move.getArrow().y] = GameObject.Arrow;
 		arrows.addElement(move.getArrow());
+	}
+
+	public boolean gameOver(boolean currentTurn) {
+		boolean whiteDead = true, blackDead = true;
+
+		for (Queen queen : queens) {
+			for (int i = 0; i < 8; i++) {
+
+				int x = queen.getPosition().x + AmazonLogic.Directions[i][0];
+				int y = queen.getPosition().y + AmazonLogic.Directions[i][1];
+
+				if (x < 0 || y < 0 || x >= 10 || y >= 10)
+					continue;
+				if (field[x][y] == GameObject.Empty)
+					if (queen.isColor())
+						whiteDead = false;
+					else
+						blackDead = false;
+			}
+		}
+
+		if (whiteDead || blackDead) {
+			if (currentTurn && blackDead) {
+				return true;
+				// Black lost
+			} else if (currentTurn && whiteDead) {
+				return false;
+				// White lost
+			} else if (!currentTurn && whiteDead) {
+				return true;
+				// White lost
+			} else if (!currentTurn && blackDead) {
+				return false;
+				// Black lost
+			}
+		}
+		return false;
+	}
+
+	public Board clone() {
+		Vector<Queen> tempQueens = new Vector<Queen>();
+		for (Queen queen : queens) {
+			tempQueens.add(queen);
+		}
+
+		Vector<Point> tempArrows = new Vector<Point>();
+		for (Point arrow : arrows) {
+			tempArrows.add(arrow);
+		}
+
+		GameObject tempField[][] = new GameObject[field.length][field[0].length];
+		for (int i = 0; i < field.length; i++) {
+			for (int j = 0; j < field[0].length; j++) {
+				tempField[i][j] = field[i][j];
+			}
+		}
+
+		return new Board(tempField, tempArrows, tempQueens);
 	}
 
 	public void draw(Graphics2D g2) {

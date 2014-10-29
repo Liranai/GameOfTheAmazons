@@ -27,7 +27,7 @@ public class AmazonLogic extends Observable implements MouseListener {
 	private boolean currentTurn;
 	private ArtificialIntelligence selectedAI;
 
-	private int[][] Directions = { { -1, -1 }, { -1, 0 }, { -1, 1 }, { 0, -1 }, { 0, 1 }, { 1, -1 }, { 1, 0 }, { 1, 1 } };
+	public static final int[][] Directions = { { -1, -1 }, { -1, 0 }, { -1, 1 }, { 0, -1 }, { 0, 1 }, { 1, -1 }, { 1, 0 }, { 1, 1 } };
 
 	public AmazonLogic(InfoPanel panel, ArtificialIntelligence selectedAI) {
 		this.selectedAI = selectedAI;
