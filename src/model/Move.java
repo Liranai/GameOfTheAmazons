@@ -16,6 +16,14 @@ public class Move {
 		this.arrow = arrow;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (((Move) obj).getTarget().equals(target) && (((Move) obj).getArrow().equals(arrow)))
+			if (((Move) obj).getQueen().getPosition().equals(queen.getPosition()) && ((Move) obj).getQueen().isColor() == queen.isColor())
+				return true;
+		return false;
+	}
+
 	public boolean validate(Board board) {
 		if (target.equals(arrow)) {
 			System.out.println("Queen shot herself");

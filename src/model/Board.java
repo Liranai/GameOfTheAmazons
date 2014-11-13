@@ -38,6 +38,12 @@ public class Board {
 		}
 	}
 
+	public Board(GameObject[][] field, Vector<Point> arrows, Vector<Queen> queens) {
+		this.field = field;
+		this.arrows = arrows;
+		this.queens = queens;
+	}
+
 	public void addQueen(Queen q) {
 		if (field[q.getPosition().x][q.getPosition().y] != GameObject.AmazonWhite && field[q.getPosition().x][q.getPosition().y] != GameObject.AmazonBlack) {
 			queens.add(q);
@@ -55,6 +61,47 @@ public class Board {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		System.out.println("Q: " + queens + " A: " + arrows);
+		System.out.println("Q: " + ((Board) obj).getQueens() + " A: " + ((Board) obj).getArrows());
+
+		for (int i = 0; i < queens.size(); i++) {
+			if (!((Board) obj).getQueens().get(i).getPosition().equals(queens.get(i).getPosition())) {
+				return false;
+			}
+		}
+		for (int i = 0; i < arrows.size(); i++) {
+			if (!((Board) obj).getArrows().get(i).equals(arrows.get(i))) {
+				return false;
+			}
+		}
+		return true;
+		// return (((Board) obj).getQueens().equals(queens) && (((Board)
+		// obj).getArrows().equals(arrows)));
+	}
+
+	public Board clone() {
+		Vector<Queen> tempQueens = new Vector<Queen>();
+		for (Queen queen : queens) {
+			tempQueens.add(queen.clone());
+		}
+
+		Vector<Point> tempArrows = new Vector<Point>();
+		for (Point arrow : arrows) {
+			tempArrows.add(arrow);
+		}
+
+		GameObject tempField[][] = new GameObject[field.length][field[0].length];
+		for (int i = 0; i < field.length; i++) {
+			for (int j = 0; j < field[0].length; j++) {
+				tempField[i][j] = field[i][j];
+			}
+		}
+
+		return new Board(tempField, tempArrows, tempQueens);
 	}
 
 	public boolean isEmpty(Point p) {

@@ -28,4 +28,8 @@ public class Queen {
 	public boolean equals(Object obj) {
 		return (((Queen) obj).color == color && ((Queen) obj).position == position);
 	}
+
+	public Queen clone() {
+		return new Queen(new Point(position.x, position.y), color);
+	}
 }
