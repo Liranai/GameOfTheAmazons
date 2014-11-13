@@ -203,7 +203,8 @@ public class RandomAI extends ArtificialIntelligence {
 
 	private Point shoot() {
 		Point target = shootLocations.get((int) (Math.random() * shootLocations.size()));
-		
+		System.out.println(moveLocations.size());
+		System.out.println(shootLocations.size());
 		return target;
 	}
 
