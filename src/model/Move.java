@@ -17,6 +17,9 @@ public class Move {
 	}
 
 	public boolean validate(Board board) {
+		if (queen.getPosition().x == target.x && queen.getPosition().y == target.y) {
+			return false;
+		}
 		if (target.equals(arrow)) {
 			// System.out.println("Queen shot herself");
 			return false;
@@ -55,8 +58,10 @@ public class Move {
 
 		for (int i = 1; i < Math.max(absx, absy); i++) {
 			if (board.getField()[(int) (start.x + i * motionx)][(int) (start.y + i * motiony)] != GameObject.Empty) {
-				System.out.println((char) ((start.x + i * motionx) + 97) + "" + (10 - (start.y + i * motiony)) + " was "
-						+ board.getField()[(int) (start.x + i * motionx)][(int) (start.y + i * motiony)]);
+				// System.out.println((char) ((start.x + i * motionx) + 97) + ""
+				// + (10 - (start.y + i * motiony)) + " was "
+				// + board.getField()[(int) (start.x + i * motionx)][(int)
+				// (start.y + i * motiony)]);
 				return false;
 			}
 		}
@@ -74,11 +79,18 @@ public class Move {
 			if (start.x + i * motionx == ignore.x && start.y + i * motiony == ignore.y)
 				continue;
 			if (board.getField()[(int) (start.x + i * motionx)][(int) (start.y + i * motiony)] != GameObject.Empty) {
-				System.out.println((char) ((start.x + i * motionx) + 97) + "" + (10 - (start.y + i * motiony)) + " was "
-						+ board.getField()[(int) (start.x + i * motionx)][(int) (start.y + i * motiony)]);
+				// System.out.println((char) ((start.x + i * motionx) + 97) + ""
+				// + (10 - (start.y + i * motiony)) + " was "
+				// + board.getField()[(int) (start.x + i * motionx)][(int)
+				// (start.y + i * motiony)]);
 				return false;
 			}
 		}
 		return true;
+	}
+
+	public String toString() {
+		String moveString = "Q:" + queen.getPosition() + " T:" + target + " A:" + arrow;
+		return moveString;
 	}
 }

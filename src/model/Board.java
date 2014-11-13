@@ -93,7 +93,7 @@ public class Board {
 		else
 			field[move.getQueen().getPosition().x][move.getQueen().getPosition().y] = GameObject.AmazonBlack;
 		field[move.getArrow().x][move.getArrow().y] = GameObject.Arrow;
-		arrows.addElement(move.getArrow());
+		arrows.add(move.getArrow());
 	}
 
 	public boolean gameOver(boolean currentTurn) {
@@ -136,7 +136,7 @@ public class Board {
 	public Board clone() {
 		Vector<Queen> tempQueens = new Vector<Queen>();
 		for (Queen queen : queens) {
-			tempQueens.add(queen);
+			tempQueens.add(queen.clone());
 		}
 
 		Vector<Point> tempArrows = new Vector<Point>();
