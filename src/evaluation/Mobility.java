@@ -8,24 +8,33 @@ import model.Queen;
 
 /*
  * Mobility = sum of the possible moves of all his/her queens
- * Mobility feature =  subtracting the opponent’s mobility from the 
-player’s
+ * Mobility feature =  subtracting the opponentâ€™s mobility from the 
+playerâ€™s
  */
 public class Mobility {
-	private Vector<Queen> queens = new Vector<Queen>();
+	private static int mobility;
 	
-	public int getMobilityFeature(boolean colour, Board board){
+	/*
+	 * @return Mobility feature
+	 */
+	public static int getMobilityFeature(boolean colour, Board board){
 		int whiteMobility = getMobility(true,board);
+		mobility = 0;
 		int blackMobility = getMobility(false,board);
-		if(colour = true)
+		if(colour = true){
 			return whiteMobility - blackMobility;
-		else 
+		}
+		else{
 			return blackMobility - whiteMobility;
+		}
 	}
 	
-	private int getMobility(boolean colour, Board board){
-		int mobility = 0;
-		getQueens(colour, board);
+	/*
+	 * sums up the possible moves of all queens of one colour
+	 */
+	public static int getMobility(boolean colour, Board board){
+		mobility = 0;
+		Vector<Queen> queens = getQueens(colour, board);
 		for(Queen q : queens){
 			Point p = q.getPosition();
 			Vector<Point> moveLocations = getLocations(p,board);
@@ -34,11 +43,16 @@ public class Mobility {
 				mobility += arrowLocations.size();
 			}
 		}
+		System.out.println("mob" + mobility);
 		return mobility;
 	}
 	
-	private void getQueens(boolean colour, Board board) {
+	/*
+	 * fills the queens vector with the locations of all queens of one colour
+	 */
+	private static Vector<Queen> getQueens(boolean colour, Board board) {
 		Vector<Queen> tempqueens = board.getQueens();
+		Vector<Queen> queens = new Vector<Queen>();
 		for (int i = 0; i < tempqueens.size(); i++) {
 			int cntr = 0;
 			if (tempqueens.get(i).isColor() == colour) {
@@ -47,12 +61,13 @@ public class Mobility {
 				cntr++;
 			}
 		}
+		return queens;
 	}
 	
 	/*
-	 * Milan's code to find all Locations
+	 * Milan's code to find all Locations modified to return locations
 	 */
-	private Vector<Point> getLocations(Point p, Board board){
+	private static Vector<Point> getLocations(Point p, Board board){
 		Vector<Point> locations = new Vector<Point>();
 		boolean filled = false;
 		while (!filled) {
