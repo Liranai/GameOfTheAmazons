@@ -17,6 +17,8 @@ import lombok.Setter;
 @Getter
 public class Board {
 
+	private static final int DIRECTIONS[][] = new int[][] { { -1, -1 }, { 0, -1 }, { 1, -1 }, { -1, 0 }, { 1, 0 }, { -1, 1 }, { 0, 1 }, { 1, 1 } };
+
 	private GameObject[][] field;
 	private Vector<Point> arrows;
 	private Vector<Queen> queens;
@@ -63,11 +65,48 @@ public class Board {
 		return null;
 	}
 
+	public double getMobility(boolean color) {
+		int whiteMoves = 0;
+		int blackMoves = 0;
+
+		for (Queen queen : queens) {
+			int movement = 0;
+			//
+			// for(int i = 0; i< 10; i++){
+			// for (int j = 0; j<10; j++){
+			// Point p = new Point(i,j);
+			// if(p.)
+			// }
+			// }
+
+			for (int i = 0; i < DIRECTIONS.length; i++) {
+				Point p = new Point(queen.getPosition().x, queen.getPosition().y);
+				while (p.x >= 0 && p.y >= 0 && p.x < 10 && p.y < 10) {
+					p.translate(DIRECTIONS[i][0], DIRECTIONS[i][1]);
+					if (this.isEmpty(p)) {
+						movement++;
+					} else {
+						break;
+					}
+				}
+			}
+			if (queen.isColor()) {
+				whiteMoves += movement;
+			} else {
+				blackMoves += movement;
+			}
+			System.out.println("Q: " + queen.getPosition() + " m: " + movement);
+		}
+
+		if (color) {
+			return blackMoves - whiteMoves;
+		} else {
+			return whiteMoves - blackMoves;
+		}
+	}
+
 	@Override
 	public boolean equals(Object obj) {
-		System.out.println("Q: " + queens + " A: " + arrows);
-		System.out.println("Q: " + ((Board) obj).getQueens() + " A: " + ((Board) obj).getArrows());
-
 		for (int i = 0; i < queens.size(); i++) {
 			if (!((Board) obj).getQueens().get(i).getPosition().equals(queens.get(i).getPosition())) {
 				return false;
@@ -79,8 +118,6 @@ public class Board {
 			}
 		}
 		return true;
-		// return (((Board) obj).getQueens().equals(queens) && (((Board)
-		// obj).getArrows().equals(arrows)));
 	}
 
 	public Board clone() {

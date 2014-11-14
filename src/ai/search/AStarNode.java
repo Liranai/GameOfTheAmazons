@@ -3,24 +3,23 @@ package ai.search;
 import lombok.Getter;
 import model.Board;
 import model.Move;
-import model.Queen;
 
 @Getter
-public class Node {
+public class AStarNode {
 
 	private double g, h, f;
 	private Status status = Status.unexplored;
-	private Node parent;
+	private AStarNode parent;
 	private Move move;
 	private Board board;
 
-	public Node(Move move, Board board) {
+	public AStarNode(Move move, Board board) {
 		this.move = move;
 		this.board = board;
 	}
 
 	public void evaluate() {
-		Node n = this;
+		AStarNode n = this;
 		int i = 0;
 		while (n != null) {
 			i++;
@@ -30,22 +29,19 @@ public class Node {
 
 		h = calculateH();
 
+		f = g + h;
 	}
 
 	private double calculateH() {
 		Board tempBoard = board.clone();
 		tempBoard.move(move);
 
-		int whiteMoves = 0;
-		int blackMoves = 0;
-		for (Queen queen : tempBoard.getQueens()) {
-
-		}
+		return tempBoard.getMobility(move.getQueen().isColor());
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		return (((Node) obj).getBoard().equals(board) && (((Node) obj).getMove().equals(move)));
+		return (((AStarNode) obj).getBoard().equals(board) && (((AStarNode) obj).getMove().equals(move)));
 	}
 
 	public enum Status {

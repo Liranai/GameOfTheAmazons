@@ -1,38 +1,48 @@
 package ai;
 
+import java.awt.Point;
 import java.util.Observable;
 import java.util.PriorityQueue;
 
 import logic.AmazonLogic;
 import model.Board;
-import ai.search.Node;
+import model.Move;
+import model.Queen;
+import ai.search.AStarNode;
 import ai.search.NodeComparator;
 
 public class AStarAI extends ArtificialIntelligence {
 
 	private Board board;
-	private PriorityQueue<Node> queue;
+	private PriorityQueue<AStarNode> queue;
 
 	public AStarAI(boolean color) {
 		super(color);
-		queue = new PriorityQueue<Node>(10, new NodeComparator());
+		queue = new PriorityQueue<AStarNode>(10, new NodeComparator());
 	}
 
 	@Override
 	public void update(Observable obser, Object obj) {
-		this.board = ((AmazonLogic) obser).getBoard().clone();
+		this.board = ((AmazonLogic) obser).getBoard();
 
-		System.out.println(board.equals(((AmazonLogic) obser).getBoard()));
+		Queen queen = board.getQueens().get(0);
+		Move move = new Move(queen, new Point(3, 3), new Point(6, 3));
 
-		Node n = new Node(null, board);
+		AStarNode n = new AStarNode(move.clone(), board.clone());
 		queue.add(n);
 		explore(5, board, queue);
 
+		if (move.validate(board))
+			board.move(move);
+
+		((AmazonLogic) obser).setCurrentTurn(!color);
 		((AmazonLogic) obser).getGUI().repaint();
 	}
 
-	private void explore(int depth, Board board, PriorityQueue<Node> queue) {
-		Node n = queue.poll();
+	private void explore(int depth, Board board, PriorityQueue<AStarNode> queue) {
+		AStarNode n = queue.poll();
 
+		n.evaluate();
+		System.out.println(n.getF());
 	}
 }
