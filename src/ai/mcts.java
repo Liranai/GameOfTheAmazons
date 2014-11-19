@@ -45,6 +45,7 @@ public class mcts extends ArtificialIntelligence{
 	}
 
 	public void getChildren(){
+		System.out.println("getting children");
 		for(int i=0;i<board.getQueens().size();i++){
 			Vector<Point> moveLocations = new Vector<Point>();
 			Queen queen = board.getQueens().get(i);
@@ -173,11 +174,14 @@ public class mcts extends ArtificialIntelligence{
 				}
 			}
 		}
+		System.out.println("children got");
 	}
 	
 	public void getValues(){
 		for(int i=0;i<firstChildren.size();i++){
+			System.out.println("child number " + i);
 			for(int j=0;j<itterations;j++){
+				System.out.println("itteration number " + j);
 				firstChildren.get(i).addToAverage(mctssearch(firstChildren.get(i), depth));
 			}
 		}
@@ -190,7 +194,9 @@ public class mcts extends ArtificialIntelligence{
 			if(g%2 == 0){
 				turn = color;
 			}else{turn = !color;}
+			System.out.println("g1");
 			MCTSNode newNode = randomMove(root, turn);
+			System.out.println("g");
 			result = mctssearch(newNode, g-1);
 		}else{
 			result = root.calculateValue(color);
@@ -209,6 +215,7 @@ public class mcts extends ArtificialIntelligence{
 		Vector<Point> moveLocations = new Vector<Point>();
 		Queen chosenQueen = null;
 		boolean moveMade = false;
+		System.out.println("rnd1");
 		while (moveMade == false) {
 			int q = (int) (Math.random() * queens.size());
 			Queen queen = queens.get(q);
@@ -282,6 +289,7 @@ public class mcts extends ArtificialIntelligence{
 				chosenQueen = queen;
 			}
 		}
+		System.out.println("rnd2");
 			Point chosenMove =  moveLocations.get((int) (Math.random() * moveLocations.size()));
 			Vector<Point> shootLocations = new Vector<Point>();
 			Point nextPoint = new Point(0, 0);
@@ -342,7 +350,7 @@ public class mcts extends ArtificialIntelligence{
 				nextPoint.setLocation(nextPoint.getX() - 1, nextPoint.getY() + 1.0);
 			}
 			
-		
+		System.out.println("rnd3");
 		Point chosenShoot = shootLocations.get((int) (Math.random() * shootLocations.size()));
 		Board newBoard = new Board();
 		newBoard = root.getBoard();
