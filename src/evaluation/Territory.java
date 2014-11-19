@@ -1,6 +1,7 @@
 package evaluation;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Vector;
@@ -12,56 +13,65 @@ import evaluation.Evaluation;
 public class Territory {
 	private static final int INFINITY = Integer.MAX_VALUE;
 
-	/*
-	 * shortest distance from 1 queen to 1 point
-	 */
-	public static int BFS(Board board, Point root, Point goal){
+	public static int[][] BFS(Board board, Point root){
 		Queue<Point> queue = new LinkedList<Point>();
-		Vector<Point> v = new Vector<Point>();
+		ArrayList<Point> v = new ArrayList<Point>();
+		int[][] distances = new int[10][10];
+		Point[][] previous = new Point[10][10];
+
+		Vector<Point> allSquares = Evaluation.getAllAvailablePoints(board);
+		for(Point o : allSquares){
+			distances[o.x][o.y] = INFINITY;
+			previous[o.x][o.y]= null; 
+		}
+		
 		v.add(root);
 		queue.add(root);
+		distances[root.x][root.y] = 0;
+		previous[root.x][root.y]= root; 
+		Vector<Point> locations = Evaluation.getLocations(root,board);
+		for(Point p : locations){
+			distances[p.x][p.y] = 1;
+			previous[p.x][p.y]= root; 
+			v.add(p);
+			queue.add(p);
+		}
 		while(!queue.isEmpty()){
 			Point tmp = queue.remove();
-			if(tmp.equals(goal)){
-				return v.size();
-			}
-			Vector<Point> locations = Evaluation.getLocations(tmp,board);
-			for(Point e : locations){
-				Point u = e;
+			Vector<Point> tmpLocations = Evaluation.getLocations(tmp,board);
+			for(Point u : tmpLocations){
 				if(!v.contains(u)){
+					if(distances[u.x][u.y] > distances[tmp.x][tmp.y] +1){
+						distances[u.x][u.y]= distances[tmp.x][tmp.y] +1;
+						previous[u.x][u.y] = tmp;
+					}
 					v.add(u);
 					queue.add(u);
 				}
 			}
 		}
-		return INFINITY;
+		return distances;
 	}
 	
 	public static int[][] getQueenDistances(Board board,boolean colour){
 		int[][] eval = new int[10][10];
-		int[] possibleShortestDistances = new int[4]; //shortest distance for each queen to one point
-		Vector<Point> points = Evaluation.getEmptySquares(board);
+		Vector<Point> allSquares = Evaluation.getAllAvailablePoints(board);
+		for(Point o : allSquares){
+			eval[o.x][o.y] = INFINITY;
+		}
 		Vector<Queen> queens = Evaluation.getQueens(colour, board);
-		//for each queen of 1 colour, go through all points 
-		//with no gameobject and get the shortest distance
-		//of each queen to each point
-		//points that cannot be reached get value INFINITY
 		for(Queen queen : queens){
-			for(Point p : points){
-				for(int i = 0; i<4;i++){
-					//Vector<Point> moveLocations = getLocations(queen.getPosition(),board);
-					possibleShortestDistances[i] = BFS(board,queen.getPosition(),p);
-				}
-				int min = INFINITY;
-				for (int i=0; i<possibleShortestDistances.length; i++){
-					   if (possibleShortestDistances[i] < min){
-					      min = possibleShortestDistances[i];
-					   }
+			for(int j =0; j<10;j++){
+				for(int k =0; k<10;k++){
+					int[][] tmp = BFS(board,queen.getPosition());
+					if(eval[j][k] > tmp[j][k]){
+						eval[j][k] = tmp[j][k];
 					}
-				eval[p.x][p.y] = min;
+				}
 			}
 		}
 		return eval;
+		
 	}
 	
 	public static int MSP(Board board, boolean currentTurn){
