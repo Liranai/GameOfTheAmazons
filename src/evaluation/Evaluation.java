@@ -5,10 +5,6 @@ import java.awt.Point;
 import java.util.*;
 
 public class Evaluation {
-   	private Vector<Point> moveLocations = new Vector<Point>();
-   	private Vector<Point> kingMoveLocations = new Vector<Point>();
-	private Board board;
-	private Vector<Queen> queens = new Vector<Queen>();
 
 	/*
 	 * fills the queens vector with the locations of all queens of one colour
