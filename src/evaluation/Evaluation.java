@@ -5,11 +5,9 @@ import java.awt.Point;
 import java.util.*;
 
 public class Evaluation {
-   	private Vector<Point> moveLocations = new Vector<Point>();
-   	private Vector<Point> kingMoveLocations = new Vector<Point>();
-	private Board board;
-	private Vector<Queen> queens = new Vector<Queen>();
-
+	
+	private static final int INFINITY = Integer.MAX_VALUE;
+	
 	/*
 	 * fills the queens vector with the locations of all queens of one colour
 	 */
@@ -91,13 +89,14 @@ public class Evaluation {
 				locations.add(aPoint);
 				nextPoint.setLocation(nextPoint.getX() - 1, nextPoint.getY() + 1.0);
 			}
-			if (locations.size() != 0) {
-				filled = true;
-			}
+			filled = true;
 		}
 		return locations;
 	}
 	
+	/*
+	 * @return a vector with all empty cells
+	 */
 	public static Vector<Point> getEmptySquares(Board board){
 		Vector<Point> points = new Vector<Point>();
 		for(int i=0; i<10;i++){
@@ -110,241 +109,112 @@ public class Evaluation {
 		return points;
 	}
 	
-	/*public ArrayList<Point> allAvailablePoints(Board board){
-		ArrayList<Point> points = new ArrayList<Point>();
-		for(int i=0; i<9;i++){
-			for(int j= 0; j<9;j++){
+	/*
+	 * @return a vector with all points in the 10*10 board
+	 */
+	public static Vector<Point> getAllAvailablePoints(Board board){
+		Vector<Point> points = new Vector<Point>();
+		for(int i=0; i<10;i++){
+			for(int j= 0; j<10;j++){
 				points.add(new Point(i,j));
 			}
 		}
 		return points;
 	}
-	//currently just a general BFS algorithm
-	//only visits all possible locations using queen moves => does not create path yet
-	public void getQueenDistances(Node root){
-		//int[][] distances = new int[10][10];
-		Queue<Node> queue = new LinkedList<Node>();
-		
-		for(Point p : points){
-			if(board.isEmpty(p)){
-				marked[p.x][p.y] = true;
-	            distTo[p.x][p.y] = 0;
-	            queue.add(new Node(p));
-			}
-		}
-		
-		while(!queue.isEmpty()){
-			Node r = queue.remove();
-			for(Node n: r.getChild())
-            {
-                if(!marked[n.getLocation().x][n.getLocation().y])
-                {
-                    edgeTo[n] = r;
-                	//queue.add(n);
-                    //n.state = State.Visited;
-                }
-            }
-		}
-	}*/
-
-	/*public void getQueenDistances(Board board,boolean colour){
-		int[][] eval = new int[9][9];
-		int[] possibleShortestDistances = new int[4];
-		ArrayList<Point> points = new ArrayList<Point>();
-		for(int i=0; i<9;i++){
-			for(int j= 0; j<9;j++){
-				if(board.getField()[i][j].equals(GameObject.Empty))
-					points.add(new Point(i,j));
-			}
-		}
-		getQueens(colour);
-		//for each queen of 1 colour, go through all points 
-		//with no gameobject and get the shortest distance
-		//of each queen to each point
-		//points that cannot be reached get value 5000
-		for(Queen queen : queens){
-			for(Point p : points){
-				for(int i = 0; i<4;i++){
-					ChildrenOf(p);
-					possibleShortestDistances[i] = BFS(board,queen.getPosition(),p,moveLocations);
-				}
-				int min = 5001;
-				for (int i=0; i<possibleShortestDistances.length; i++){
-					   if (possibleShortestDistances[i] < min){
-					      min = possibleShortestDistances[i];
-					   }
-					}
-				eval[p.x][p.y] = min;
-			}
-		}
-	}*/
 	
-	/*public void getKingDistances(Board board,boolean colour){
-		int[][] eval2 = new int[9][9];
-		int[] possibleShortestDistances = new int[4];
-		ArrayList<Point> points = new ArrayList<Point>();
-		for(int i=0; i<9;i++){
-			for(int j= 0; j<9;j++){
-				if(board.getField()[i][j].equals(GameObject.Empty))
-					points.add(new Point(i,j));
-			}
-		}
-		getQueens(colour);
-		//for each queen of 1 colour, go through all points 
-		//with no gameobject and get the shortest distance
-		//of each queen to each point
-		//points that cannot be reached get value 5000
-		for(Queen queen : queens){
-			for(Point p : points){
-				for(int i = 0; i<4;i++){
-					ChildrenOf2(p);
-					possibleShortestDistances[i] = BFS(board,queen.getPosition(),p,kingMoveLocations);
-				}
-				int min = 5001;
-				for (int i=0; i<possibleShortestDistances.length; i++){
-					   if (possibleShortestDistances[i] < min){
-					      min = possibleShortestDistances[i];
-					   }
-					}
-				eval2[p.x][p.y] = min;
-			}
-		}
-	}*/
-	
-	public int BFS(Board board, Point root, Point goal, Vector<Point> locations){
+	/*
+	 * goes through board and gets queen distances to all other points
+	 */
+	public static int[][] BFS(Board board, Point root){
 		Queue<Point> queue = new LinkedList<Point>();
 		ArrayList<Point> v = new ArrayList<Point>();
+		int[][] distances = new int[10][10];
+		Point[][] previous = new Point[10][10];
+
+		Vector<Point> allSquares = getAllAvailablePoints(board);
+		for(Point o : allSquares){
+			distances[o.x][o.y] = INFINITY;
+			previous[o.x][o.y]= null; 
+		}
+		
 		v.add(root);
 		queue.add(root);
+		distances[root.x][root.y] = 0;
+		previous[root.x][root.y]= root; 
+		Vector<Point> locations = getLocations(root,board);
+		for(Point p : locations){
+			distances[p.x][p.y] = 1;
+			previous[p.x][p.y]= root; 
+			v.add(p);
+			queue.add(p);
+		}
 		while(!queue.isEmpty()){
 			Point tmp = queue.remove();
-			if(tmp.equals(goal)){
-				return v.size();
-			}
-			for(Point e : locations){
-				Point u = e;
+			Vector<Point> tmpLocations = getLocations(tmp,board);
+			for(Point u : tmpLocations){
 				if(!v.contains(u)){
+					if(distances[u.x][u.y] > distances[tmp.x][tmp.y] +1){
+						distances[u.x][u.y]= distances[tmp.x][tmp.y] +1;
+						previous[u.x][u.y] = tmp;
+					}
 					v.add(u);
 					queue.add(u);
 				}
 			}
 		}
-		return 5000;
+		return distances;
 	}
 	
-	private boolean ChildrenOf(Point p) {//fill moveLocations starting from point p
-		boolean filled = false;
-		while (!filled) {
-			Point nextPoint = new Point(0, 0);
-			nextPoint.setLocation(p.getX(), p.getY() + 1.0);
-			while (board.isEmpty(nextPoint) == true) {
-				Point aPoint = new Point();
-				aPoint.setLocation(nextPoint);
-				moveLocations.add(aPoint);
-				nextPoint.setLocation(nextPoint.getX(), nextPoint.getY() + 1.0);
-			}
-			nextPoint.setLocation(p.getX() + 1.0, p.getY() + 1.0);
-			while (board.isEmpty(nextPoint) == true) {
-				Point aPoint = new Point();
-				aPoint.setLocation(nextPoint);
-				moveLocations.add(aPoint);
-				nextPoint.setLocation(nextPoint.getX() + 1.0, nextPoint.getY() + 1.0);
-			}
-			nextPoint.setLocation(p.getX() + 1, p.getY());
-			while (board.isEmpty(nextPoint) == true) {
-				Point aPoint = new Point();
-				aPoint.setLocation(nextPoint);
-				moveLocations.add(aPoint);
-				nextPoint.setLocation(nextPoint.getX() + 1, nextPoint.getY());
-			}
-			nextPoint.setLocation(p.getX() + 1, p.getY() - 1.0);
-			while (board.isEmpty(nextPoint) == true) {
-				Point aPoint = new Point();
-				aPoint.setLocation(nextPoint);
-				moveLocations.add(aPoint);
-				nextPoint.setLocation(nextPoint.getX() + 1, nextPoint.getY() - 1.0);
-			}
-			nextPoint.setLocation(p.getX(), p.getY() - 1.0);
-			while (board.isEmpty(nextPoint) == true) {
-				Point aPoint = new Point();
-				aPoint.setLocation(nextPoint);
-				moveLocations.add(aPoint);
-				nextPoint.setLocation(nextPoint.getX(), nextPoint.getY() - 1.0);
-			}
-			nextPoint.setLocation(p.getX() - 1, p.getY() - 1.0);
-			while (board.isEmpty(nextPoint) == true) {
-				Point aPoint = new Point();
-				aPoint.setLocation(nextPoint);
-				moveLocations.add(aPoint);
-				nextPoint.setLocation(nextPoint.getX() - 1, nextPoint.getY() - 1.0);
-			}
-			nextPoint.setLocation(p.getX() - 1, p.getY());
-			while (board.isEmpty(nextPoint) == true) {
-				Point aPoint = new Point();
-				aPoint.setLocation(nextPoint);
-				moveLocations.add(aPoint);
-				nextPoint.setLocation(nextPoint.getX() - 1, nextPoint.getY());
-			}
-			nextPoint.setLocation(p.getX() - 1, p.getY() + 1.0);
-			while (board.isEmpty(nextPoint) == true) {
-				Point aPoint = new Point();
-				aPoint.setLocation(nextPoint);
-				moveLocations.add(aPoint);
-				nextPoint.setLocation(nextPoint.getX() - 1, nextPoint.getY() + 1.0);
-			}
-			if (moveLocations.size() != 0) {
-				filled = true;
-			} else {
-				return false;
+	/*
+	 * compares queen distances and returns a vector with the shortest distances of one player to each cell in the board
+	 */
+	public static int[][] getQueenDistances(Board board,boolean colour){
+		int[][] eval = new int[10][10];
+		Vector<Point> allSquares = getAllAvailablePoints(board);
+		for(Point o : allSquares){
+			eval[o.x][o.y] = INFINITY;
+		}
+		int[][]mob = new int[10][10];
+		Vector<Queen> queens = getQueens(colour, board);
+		for(Queen queen : queens){
+			for(int j =0; j<10;j++){
+				for(int k =0; k<10;k++){
+					int[][] tmp = BFS(board,queen.getPosition());
+					if(eval[j][k]==1)
+						mob[j][k]++;
+					if(eval[j][k] > tmp[j][k]){
+						eval[j][k] = tmp[j][k];
+					}
+				}
 			}
 		}
-		return true;
+		return eval;
 	}
 	
-	private boolean ChildrenOf2(Point p) {//fill moveLocations starting from point p
-		boolean filled = false;
-		while (!filled) {
-			Point nextPoint = new Point(0, 0);
-			nextPoint.setLocation(p.getX(), p.getY() + 1.0);
-			if (board.isEmpty(nextPoint) == true) {
-				kingMoveLocations.add(nextPoint);
-			}
-			nextPoint.setLocation(p.getX() + 1.0, p.getY() + 1.0);
-			if (board.isEmpty(nextPoint) == true) {
-				kingMoveLocations.add(nextPoint);
-			}
-			nextPoint.setLocation(p.getX() + 1, p.getY());
-			if (board.isEmpty(nextPoint) == true) {;
-				kingMoveLocations.add(nextPoint);
-			}
-			nextPoint.setLocation(p.getX() + 1, p.getY() - 1.0);
-			if (board.isEmpty(nextPoint) == true) {
-				kingMoveLocations.add(nextPoint);
-			}
-			nextPoint.setLocation(p.getX(), p.getY() - 1.0);
-			if (board.isEmpty(nextPoint) == true) {
-				kingMoveLocations.add(nextPoint);
-			}
-			nextPoint.setLocation(p.getX() - 1, p.getY() - 1.0);
-			if (board.isEmpty(nextPoint) == true) {
-				kingMoveLocations.add(nextPoint);
-			}
-			nextPoint.setLocation(p.getX() - 1, p.getY());
-			if (board.isEmpty(nextPoint) == true) {
-				kingMoveLocations.add(nextPoint);
-			}
-			nextPoint.setLocation(p.getX() - 1, p.getY() + 1.0);
-			if (board.isEmpty(nextPoint) == true) {
-				kingMoveLocations.add(nextPoint);
-			}
-			if (kingMoveLocations.size() != 0) {
-				filled = true;
-			} else {
-				return false;
+	public static int[][] calcMob(Board board, Point root){
+		int[][] mob = new int[10][10];
+		Vector<Point> locations = getLocations(root,board);
+		for(Point p : locations){
+			mob[p.x][p.y] = 1;
+		}
+		return mob;
+	}
+	
+	/*
+	 * Mob = the number of queens which can arrive at square x in one move. 
+	 */
+	public static int[][] getMob(Board board, boolean colour){
+		int[][]mob = new int[10][10];
+		Vector<Queen> queens = getQueens(colour, board);
+		for(Queen queen : queens){
+			int[][]tmp = calcMob(board,queen.getPosition());
+			for(int j =0; j<10;j++){
+				for(int k =0; k<10;k++){
+					if(tmp[j][k] == 1)
+						mob[j][k]++;
+				}
 			}
 		}
-		return true;
+		return mob;
 	}
-	
-	
 }
