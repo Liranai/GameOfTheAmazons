@@ -17,7 +17,7 @@ import lombok.Setter;
 @Getter
 public class Board {
 
-	private static final int DIRECTIONS[][] = new int[][] { { -1, -1 }, { 0, -1 }, { 1, -1 }, { -1, 0 }, { 1, 0 }, { -1, 1 }, { 0, 1 }, { 1, 1 } };
+	public static final int DIRECTIONS[][] = new int[][] { { -1, -1 }, { 0, -1 }, { 1, -1 }, { -1, 0 }, { 1, 0 }, { -1, 1 }, { 0, 1 }, { 1, 1 } };
 
 	private GameObject[][] field;
 	private Vector<Point> arrows;
@@ -71,13 +71,6 @@ public class Board {
 
 		for (Queen queen : queens) {
 			int movement = 0;
-			//
-			// for(int i = 0; i< 10; i++){
-			// for (int j = 0; j<10; j++){
-			// Point p = new Point(i,j);
-			// if(p.)
-			// }
-			// }
 
 			for (int i = 0; i < DIRECTIONS.length; i++) {
 				Point p = new Point(queen.getPosition().x, queen.getPosition().y);
@@ -95,7 +88,6 @@ public class Board {
 			} else {
 				blackMoves += movement;
 			}
-			System.out.println("Q: " + queen.getPosition() + " m: " + movement);
 		}
 
 		if (color) {
@@ -103,6 +95,30 @@ public class Board {
 		} else {
 			return whiteMoves - blackMoves;
 		}
+	}
+
+	public boolean isGameOver() {
+		boolean whiteDead = true;
+		boolean blackDead = true;
+
+		for (Queen queen : queens) {
+			for (int i = 0; i < DIRECTIONS.length; i++) {
+				Point p = new Point(queen.getPosition().x, queen.getPosition().y);
+				p.translate(DIRECTIONS[i][0], DIRECTIONS[i][1]);
+				if (this.isEmpty(p)) {
+					if (queen.isColor()) {
+						whiteDead = false;
+					} else {
+						blackDead = false;
+					}
+				}
+			}
+		}
+
+		if (blackDead || whiteDead) {
+			return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -164,7 +180,12 @@ public class Board {
 
 	public void move(Move move) {
 		field[move.getQueen().getPosition().x][move.getQueen().getPosition().y] = GameObject.Empty;
-		move.getQueen().move(move.getTarget());
+		for (Queen queen : queens) {
+			if (move.getQueen().equals(queen)) {
+				queen.move(move.getTarget());
+				move.getQueen().move(move.getTarget());
+			}
+		}
 		if (move.getQueen().isColor())
 			field[move.getQueen().getPosition().x][move.getQueen().getPosition().y] = GameObject.AmazonWhite;
 		else

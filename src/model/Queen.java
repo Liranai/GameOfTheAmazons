@@ -26,7 +26,7 @@ public class Queen {
 
 	@Override
 	public boolean equals(Object obj) {
-		return (((Queen) obj).color == color && ((Queen) obj).position == position);
+		return (((Queen) obj).isColor() == color && ((Queen) obj).getPosition().equals(position));
 	}
 
 	public Queen clone() {

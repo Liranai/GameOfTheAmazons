@@ -1,13 +1,13 @@
 import gui.InfoPanel;
 import logic.AmazonLogic;
-import ai.AStarAI;
+import ai.AStarTwoAI;
 import ai.ArtificialIntelligence;
 
 public class Main {
 
 	public static void main(String[] args) {
 		InfoPanel panel = new InfoPanel();
-		ArtificialIntelligence selectedAI = new AStarAI(false);
+		ArtificialIntelligence selectedAI = new AStarTwoAI(false);
 
 		AmazonLogic logic;
 		if (selectedAI != null)

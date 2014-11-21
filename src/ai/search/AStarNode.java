@@ -1,6 +1,7 @@
 package ai.search;
 
 import lombok.Getter;
+import lombok.Setter;
 import model.Board;
 import model.Move;
 
@@ -8,7 +9,9 @@ import model.Move;
 public class AStarNode {
 
 	private double g, h, f;
+	@Setter
 	private Status status = Status.unexplored;
+	@Setter
 	private AStarNode parent;
 	private Move move;
 	private Board board;
@@ -16,6 +19,8 @@ public class AStarNode {
 	public AStarNode(Move move, Board board) {
 		this.move = move;
 		this.board = board;
+		if (move != null)
+			board.move(move.clone());
 	}
 
 	public void evaluate() {
@@ -33,10 +38,13 @@ public class AStarNode {
 	}
 
 	private double calculateH() {
-		Board tempBoard = board.clone();
-		tempBoard.move(move);
+		// Board tempBoard = board.clone();
+		// tempBoard.move(move);
 
-		return tempBoard.getMobility(move.getQueen().isColor());
+		// return tempBoard.getMobility(move.getQueen().isColor());
+		if (move != null)
+			return board.getMobility(move.getQueen().isColor());
+		return 0.0;
 	}
 
 	@Override

@@ -95,6 +95,7 @@ public class AmazonLogic extends Observable implements MouseListener {
 				if (checkMoves()) {
 					System.out.println("Game over!");
 				}
+				GUI.repaint();
 				setChanged();
 				notifyObservers();
 			}
@@ -117,6 +118,7 @@ public class AmazonLogic extends Observable implements MouseListener {
 						if (checkMoves()) {
 							System.out.println("Game over!");
 						}
+						GUI.repaint();
 						setChanged();
 						notifyObservers();
 					}
