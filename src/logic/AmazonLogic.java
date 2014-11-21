@@ -27,8 +27,6 @@ public class AmazonLogic extends Observable implements MouseListener {
 	private boolean currentTurn;
 	private ArtificialIntelligence selectedAI;
 
-	private int[][] Directions = { { -1, -1 }, { -1, 0 }, { -1, 1 }, { 0, -1 }, { 0, 1 }, { 1, -1 }, { 1, 0 }, { 1, 1 } };
-
 	public AmazonLogic(InfoPanel panel, ArtificialIntelligence selectedAI) {
 		this.selectedAI = selectedAI;
 		constructBoard();
@@ -135,8 +133,8 @@ public class AmazonLogic extends Observable implements MouseListener {
 		for (Queen queen : board.getQueens()) {
 			for (int i = 0; i < 8; i++) {
 
-				int x = queen.getPosition().x + Directions[i][0];
-				int y = queen.getPosition().y + Directions[i][1];
+				int x = queen.getPosition().x + Board.DIRECTIONS[i][0];
+				int y = queen.getPosition().y + Board.DIRECTIONS[i][1];
 
 				if (x < 0 || y < 0 || x >= 10 || y >= 10)
 					continue;

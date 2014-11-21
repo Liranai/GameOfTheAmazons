@@ -19,7 +19,7 @@ public class mcts extends ArtificialIntelligence{
 		// TODO Auto-generated constructor stub
 	}
 	public int depth = 4;
-	public int itterations = 100;
+	public int iterations = 100;
 
 
 
@@ -180,7 +180,7 @@ public class mcts extends ArtificialIntelligence{
 	public void getValues(){
 		for(int i=0;i<firstChildren.size();i++){
 			System.out.println("child number " + i);
-			for(int j=0;j<itterations;j++){
+			for(int j=0;j<iterations;j++){
 				System.out.println("itteration number " + j);
 				firstChildren.get(i).addToAverage(mctssearch(firstChildren.get(i), depth, color));
 			}
