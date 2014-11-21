@@ -16,34 +16,39 @@ public class Move {
 		this.arrow = arrow;
 	}
 
+	@Override
+	public Move clone() {
+		return new Move(queen.clone(), (Point) target.clone(), (Point) arrow.clone());
+	}
+
 	public boolean validate(Board board) {
 		if (queen.getPosition().x == target.x && queen.getPosition().y == target.y) {
 			return false;
 		}
 		if (target.equals(arrow)) {
-			// System.out.println("Queen shot herself");
+			System.out.println("Queen shot herself");
 			return false;
 		}
 		if (board.getField()[queen.getPosition().x][queen.getPosition().y] == GameObject.Empty) {
-			// System.out.println("No Queen found");
+			System.out.println("No Queen found");
 			return false;
 		}
 		if (!((target.x >= 0 && target.x < 10 && target.y >= 0 && target.y < 10) && ((target.x == queen.getPosition().x && target.y != queen.getPosition().y)
 				|| (target.y == queen.getPosition().y && target.x != queen.getPosition().x) || (Math.abs(target.x - queen.getPosition().x) == Math.abs(target.y - queen.getPosition().y))))) {
-			// System.out.println("Queen moved in an unQueenlike manner");
+			System.out.println("Queen moved in an unQueenlike manner");
 			return false;
 		}
 		if (!((arrow.x >= 0 && arrow.x < 10 && arrow.y >= 0 && arrow.y < 10) && ((arrow.x == target.x && arrow.y != target.y) || (arrow.y == target.y && arrow.x != target.x) || (Math.abs(arrow.x
 				- target.x) == Math.abs(arrow.y - target.y))))) {
-			// System.out.println("Arrow moved in an unQueenlike manner");
+			System.out.println("Arrow moved in an unQueenlike manner");
 			return false;
 		}
 		if (!checkMove(board, queen.getPosition(), target)) {
-			// System.out.println("Queen went past something");
+			System.out.println("Queen went past something");
 			return false;
 		}
 		if (!checkMove(board, target, arrow, queen.getPosition())) {
-			// System.out.println("Arrow went past something");
+			System.out.println("Arrow went past something");
 			return false;
 		}
 		return true;

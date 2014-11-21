@@ -21,12 +21,14 @@ public class MiniMaxAI extends ArtificialIntelligence {
 	public void update(Observable obser, Object obj) {
 		// this.board = ((AmazonLogic) obser).getBoard();
 
+		System.out.println("Running MiniMax");
+
 		Node root = constructTree(1, ((AmazonLogic) obser).getBoard());
-		System.out.println(root.getChildren().size());
-		for (Node child : root.getChildren()) {
-			if (child.getChildren().size() != 0)
-				System.out.println(child.getChildren().size());
-		}
+		// System.out.println(root.getChildren().size());
+		// for (Node child : root.getChildren()) {
+		// if (child.getChildren().size() != 0)
+		// System.out.println(child.getChildren().size());
+		// }
 
 	}
 
@@ -34,11 +36,15 @@ public class MiniMaxAI extends ArtificialIntelligence {
 		Node root = new Node(null, board, null, !color);
 
 		makeChildren(root);
-		for (Node child : root.getChildren()) {
-			makeChildren(child);
-			for (Node grandChild : child.getChildren()) {
-				makeChildren(grandChild);
-			}
+		System.out.println("Evaluationg " + root.getChildren().size() + " children.");
+		for (int i = 0; i < root.getChildren().size(); i++) {
+			makeChildren(root.getChildren().get(i));
+			System.out.println("Evaluated " + i + " nodes. Found " + root.getChildren().get(i).getChildren().size() + " child nodes");
+			// for (Node child : root.getChildren()) {
+			// makeChildren(child);
+			// for (Node grandChild : child.getChildren()) {
+			// makeChildren(grandChild);
+			// }
 		}
 
 		// exploreNode(root, n, 0);
@@ -71,14 +77,18 @@ public class MiniMaxAI extends ArtificialIntelligence {
 								Point arrow = new Point(p.x, p.y);
 								while (arrow.x >= 0 && arrow.y >= 0 && arrow.x < 10 && arrow.y < 10) {
 									arrow.translate(Board.DIRECTIONS[j][0], Board.DIRECTIONS[j][1]);
+
 									if (node.getBoard().isEmpty(arrow)) {
 										Move move = new Move(queen, p, arrow);
-										if (move.validate(node.getBoard())) {
-											Board clone = node.getBoard().clone();
-											clone.move(move);
-											Node child = new Node(node, clone, move, !node.isColor());
-											node.addChild(child);
-										}
+										// System.out.println(move);
+
+										// if (move.validate(node.getBoard())) {
+										// System.out.println(move);
+										Board clone = node.getBoard().clone();
+										clone.move(move.clone());
+										Node child = new Node(node, clone, move, !node.isColor());
+										node.addChild(child);
+										// }
 									} else {
 										break;
 									}
@@ -93,5 +103,4 @@ public class MiniMaxAI extends ArtificialIntelligence {
 			}
 		}
 	}
-
 }
