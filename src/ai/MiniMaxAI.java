@@ -2,7 +2,6 @@ package ai;
 
 import java.awt.Point;
 import java.util.Observable;
-import java.util.Random;
 
 import logic.AmazonLogic;
 import model.Board;
@@ -34,16 +33,13 @@ public class MiniMaxAI extends ArtificialIntelligence {
 	private Node constructTree(int n, Board board) {
 		Node root = new Node(null, board, null, !color);
 
-		Random rand = new Random(System.currentTimeMillis());
-
 		makeChildren(root);
-		for (int i = 0; i < 250; i++) {
-			Node child = root.getChildren().get(rand.nextInt(root.getChildren().size()));
+		for (Node child : root.getChildren()) {
 			makeChildren(child);
+			for (Node grandChild : child.getChildren()) {
+				makeChildren(grandChild);
+			}
 		}
-		// for (Node child : root.getChildren()) {
-		// makeChildren(child);
-		// }
 
 		// exploreNode(root, n, 0);
 		return root;
@@ -64,20 +60,34 @@ public class MiniMaxAI extends ArtificialIntelligence {
 
 		for (Queen queen : node.getBoard().getQueens()) {
 			if (queen.isColor() != node.isColor()) {
-				for (int tr = 0; tr < node.getBoard().getField().length; tr++) {
-					for (int tc = 0; tc < node.getBoard().getField()[0].length; tc++) {
-						for (int ar = 0; ar < node.getBoard().getField().length; ar++) {
-							for (int ac = 0; ac < node.getBoard().getField()[0].length; ac++) {
-								Move move = new Move(queen.clone(), new Point(tr, tc), new Point(ar, ac));
-								if (move.validate(node.getBoard())) {
-									// possibleMoves.add(move);
-									Board clone = node.getBoard().clone();
-									clone.move(move);
-									Node child = new Node(node, clone, move, !node.isColor());
-									node.addChild(child);
+
+				for (int i = 0; i < Board.DIRECTIONS.length; i++) {
+					Point p = new Point(queen.getPosition().x, queen.getPosition().y);
+					while (p.x >= 0 && p.y >= 0 && p.x < 10 && p.y < 10) {
+						p.translate(Board.DIRECTIONS[i][0], Board.DIRECTIONS[i][1]);
+						if (node.getBoard().isEmpty(p)) {
+
+							for (int j = 0; j < Board.DIRECTIONS.length; j++) {
+								Point arrow = new Point(p.x, p.y);
+								while (arrow.x >= 0 && arrow.y >= 0 && arrow.x < 10 && arrow.y < 10) {
+									arrow.translate(Board.DIRECTIONS[j][0], Board.DIRECTIONS[j][1]);
+									if (node.getBoard().isEmpty(arrow)) {
+										Move move = new Move(queen, p, arrow);
+										if (move.validate(node.getBoard())) {
+											Board clone = node.getBoard().clone();
+											clone.move(move);
+											Node child = new Node(node, clone, move, !node.isColor());
+											node.addChild(child);
+										}
+									} else {
+										break;
+									}
 								}
 							}
+						} else {
+							break;
 						}
+
 					}
 				}
 			}
