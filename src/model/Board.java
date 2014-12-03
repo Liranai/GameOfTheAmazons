@@ -16,6 +16,8 @@ import lombok.Setter;
 
 @Getter
 public class Board {
+	
+	public static final int DIRECTIONS[][] = new int[][] { { -1, -1 }, { 0, -1 }, { 1, -1 }, { -1, 0 }, { 1, 0 }, { -1, 1 }, { 0, 1 }, { 1, 1 } };
 
 	private GameObject[][] field;
 	private Vector<Point> arrows;

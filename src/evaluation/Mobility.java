@@ -42,7 +42,6 @@ public class Mobility {
 				mobility += arrowLocations.size();
 			}
 		}
-		System.out.println("mob" + mobility);
 		return mobility;
 	}
 	
