@@ -28,8 +28,9 @@ public class AStarTwoAI extends ArtificialIntelligence {
 		explore(board.clone(), queue, null);
 		System.out.println(queue.size());
 
-		for (int i = 0; i < 25; i++) {
+		for (int i = 0; i < 500; i++) {
 			AStarTwoNode tNode = queue.poll();
+			System.out.println("Node: " + i + " " + queue.size());
 			explore(tNode.getAugmentedBoard(), queue, tNode);
 		}
 
