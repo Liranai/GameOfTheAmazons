@@ -24,6 +24,11 @@ public class Move {
 		return false;
 	}
 
+	@Override
+	public Move clone() {
+		return new Move(queen.clone(), (Point) target.clone(), (Point) arrow.clone());
+	}
+
 	public boolean validate(Board board) {
 		if (target.equals(arrow)) {
 			System.out.println("Queen shot herself");

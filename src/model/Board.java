@@ -16,7 +16,7 @@ import lombok.Setter;
 
 @Getter
 public class Board {
-	
+
 	public static final int DIRECTIONS[][] = new int[][] { { -1, -1 }, { 0, -1 }, { 1, -1 }, { -1, 0 }, { 1, 0 }, { -1, 1 }, { 0, 1 }, { 1, 1 } };
 
 	private GameObject[][] field;
@@ -129,7 +129,12 @@ public class Board {
 
 	public void move(Move move) {
 		field[move.getQueen().getPosition().x][move.getQueen().getPosition().y] = GameObject.Empty;
-		move.getQueen().move(move.getTarget());
+		for (Queen queen : queens) {
+			if (move.getQueen().equals(queen)) {
+				queen.move(move.getTarget());
+				move.getQueen().move(move.getTarget());
+			}
+		}
 		if (move.getQueen().isColor())
 			field[move.getQueen().getPosition().x][move.getQueen().getPosition().y] = GameObject.AmazonWhite;
 		else

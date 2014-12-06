@@ -1,13 +1,13 @@
 import gui.InfoPanel;
 import logic.AmazonLogic;
 import ai.ArtificialIntelligence;
-import ai.mcts;
+import ai.mcts2;
 
 public class Main {
 
 	public static void main(String[] args) {
 		InfoPanel panel = new InfoPanel();
-		ArtificialIntelligence selectedAI = new mcts(false);
+		ArtificialIntelligence selectedAI = new mcts2(false);
 
 		AmazonLogic logic;
 		if (selectedAI != null)
