@@ -25,12 +25,12 @@ public class AmazonLogic extends Observable implements MouseListener {
 	private Point target;
 	@Setter
 	private boolean currentTurn;
-	private ArtificialIntelligence selectedAI;
+	// private ArtificialIntelligence selectedAI;
 
 	private int[][] Directions = { { -1, -1 }, { -1, 0 }, { -1, 1 }, { 0, -1 }, { 0, 1 }, { 1, -1 }, { 1, 0 }, { 1, 1 } };
 
-	public AmazonLogic(InfoPanel panel, ArtificialIntelligence selectedAI) {
-		this.selectedAI = selectedAI;
+	public AmazonLogic(InfoPanel panel, ArtificialIntelligence... selectedAI) {
+		// this.selectedAI = selectedAI[0];
 		constructBoard();
 
 		GUI = new AmazonUI(board, panel, this);
@@ -129,6 +129,18 @@ public class AmazonLogic extends Observable implements MouseListener {
 			}
 		}
 		GUI.repaint();
+
+	}
+
+	public void endTurn() {
+		currentTurn = !currentTurn;
+		GUI.validate();
+		GUI.repaint();
+		if (checkMoves()) {
+			System.out.println("Game over!");
+		}
+		setChanged();
+		notifyObservers();
 	}
 
 	public boolean checkMoves() {

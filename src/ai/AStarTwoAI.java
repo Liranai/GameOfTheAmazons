@@ -20,35 +20,48 @@ public class AStarTwoAI extends ArtificialIntelligence {
 
 	@Override
 	public void update(Observable obser, Object obj) {
-		Board board = ((AmazonLogic) obser).getBoard();
-		PriorityQueue<AStarTwoNode> queue = new PriorityQueue<AStarTwoNode>(10, new NodeTwoComparator());
+		if (((AmazonLogic) obser).isCurrentTurn() == color) {
+			Board board = ((AmazonLogic) obser).getBoard();
+			PriorityQueue<AStarTwoNode> queue = new PriorityQueue<AStarTwoNode>(10, new NodeTwoComparator());
 
-		System.out.println("Running: AStar2.0");
+			// System.out.println("Running: AStar2.0");
 
-		explore(board.clone(), queue, null);
-		System.out.println(queue.size());
+			explore(board.clone(), queue, null);
+			// System.out.println(queue.size());
 
-		for (int i = 0; i < 500; i++) {
-			AStarTwoNode tNode = queue.poll();
-			System.out.println("Node: " + i + " " + queue.size());
-			explore(tNode.getAugmentedBoard(), queue, tNode);
+			if (queue.size() == 0) {
+				return;
+			}
+
+			int i = 0;
+			while (queue.size() > 2 && i < 15) {
+				AStarTwoNode tNode = queue.poll();
+				System.out.print(".");
+				// System.out.println("Node: " + i + " " + queue.size());
+				explore(tNode.getAugmentedBoard(), queue, tNode);
+				i++;
+			}
+
+			AStarTwoNode node = queue.peek();
+			while (node.getParent() != null) {
+				node = node.getParent();
+			}
+
+			System.out.println("For: " + (color ? " White" : " Black") + " nodes: " + queue.size());
+			System.out.println(node.getMove().getQueen().getPosition() + " to " + node.getMove().getTarget() + " targeting " + node.getMove().getArrow());
+
+			if (node.getMove().validate(board)) {
+				board.move(node.getMove());
+			}
+
+			((AmazonLogic) obser).getGUI().repaint();
+			((AmazonLogic) obser).endTurn();
+
+			// ((AmazonLogic) obser).setBoard(board);
+
+			// ((AmazonLogic) obser).setCurrentTurn(!color);
+
 		}
-
-		AStarTwoNode node = queue.peek();
-		while (node.getParent() != null) {
-			node = node.getParent();
-		}
-
-		System.out.println(node.getMove().getQueen().getPosition() + " to " + node.getMove().getTarget() + " targeting " + node.getMove().getArrow());
-
-		if (node.getMove().validate(board)) {
-			board.move(node.getMove());
-		}
-
-		// ((AmazonLogic) obser).setBoard(board);
-
-		((AmazonLogic) obser).setCurrentTurn(!color);
-		((AmazonLogic) obser).getGUI().repaint();
 	}
 
 	public void explore(Board board, PriorityQueue<AStarTwoNode> queue, AStarTwoNode parent) {
@@ -69,7 +82,7 @@ public class AStarTwoAI extends ArtificialIntelligence {
 								Point arrow = new Point(p.x, p.y);
 								while (arrow.x >= 0 && arrow.y >= 0 && arrow.x < 10 && arrow.y < 10) {
 									arrow.translate(Board.DIRECTIONS[j][0], Board.DIRECTIONS[j][1]);
-									if (board.isEmpty(arrow)) {
+									if (board.isEmpty(arrow) || arrow.equals(queen.getPosition())) {
 										Move move = new Move(queen, p, arrow);
 										AStarTwoNode node = new AStarTwoNode(move.clone(), board.clone());
 										node.setParent(parent);

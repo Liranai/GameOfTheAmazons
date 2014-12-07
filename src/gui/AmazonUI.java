@@ -82,4 +82,10 @@ public class AmazonUI extends JFrame {
 		setVisible(true);
 		setLocationRelativeTo(null);
 	}
+
+	@Override
+	public void repaint() {
+		super.repaint();
+		boardPanel.repaint();
+	}
 }
