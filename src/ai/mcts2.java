@@ -24,19 +24,21 @@ public class mcts2 extends ArtificialIntelligence {
 
 	@Override
 	public void update(Observable obser, Object obj) {
-		firstChildren = new Vector<MCTSNode>();
-		Board board = ((AmazonLogic) obser).getBoard();
+		if (((AmazonLogic) obser).isCurrentTurn() == color) {
+			firstChildren = new Vector<MCTSNode>();
+			Board board = ((AmazonLogic) obser).getBoard();
 
-		Move move = getMove(board);
+			Move move = getMove(board);
 
-		System.out.println("Q: " + move.getQueen().getPosition() + " T: " + move.getTarget() + " A: " + move.getArrow());
+			System.out.println("Q: " + move.getQueen().getPosition() + " T: " + move.getTarget() + " A: " + move.getArrow());
 
-		if (move.validate(board)) {
-			board.move(move);
+			if (move.validate(board)) {
+				board.move(move.getQueen(), move.getTarget(), move.getArrow());
+			}
+
+			((AmazonLogic) obser).endTurn();
+			((AmazonLogic) obser).getGUI().repaint();
 		}
-
-		((AmazonLogic) obser).setCurrentTurn(!color);
-		((AmazonLogic) obser).getGUI().repaint();
 	}
 
 	public Move getMove(Board board) {
@@ -96,19 +98,27 @@ public class mcts2 extends ArtificialIntelligence {
 	public void setValues() {
 		System.out.println(firstChildren.size());
 		for (int i = 0; i < firstChildren.size(); i++) {
-			System.out.println("child number " + i);
+			// System.out.println("child number " + i);
+			if (firstChildren.size() > 50) {
+				if (i % (firstChildren.size() / 50) == 0) {
+					System.out.print(".");
+				}
+			} else {
+				System.out.print(".");
+			}
 			for (int j = 0; j < iterations; j++) {
 				// System.out.println("iteration number " + j);
 				firstChildren.get(i).addToAverage(MCTSSearch(firstChildren.get(i), depth, !color));
 			}
 		}
+		System.out.print("\n");
 	}
 
 	public double MCTSSearch(MCTSNode root, int g, boolean turn) {
 		double result = 0.0;
 		if (g != 0) {
-			MCTSNode newNode = randomMove(root, !turn);
-			result = MCTSSearch(newNode, g - 1, turn);
+			MCTSNode newNode = randomMove(root, turn);
+			result = MCTSSearch(newNode, g - 1, !turn);
 		} else {
 			result = root.calculateValue(!turn);
 		}
@@ -135,7 +145,7 @@ public class mcts2 extends ArtificialIntelligence {
 									arrow.translate(Board.DIRECTIONS[j][0], Board.DIRECTIONS[j][1]);
 									if (root.getBoard().isEmpty(arrow) || arrow.equals(queen.getPosition())) {
 										Move move = new Move(queen, p, arrow);
-										moves.add(move);
+										moves.add(move.clone());
 									} else {
 										break;
 									}

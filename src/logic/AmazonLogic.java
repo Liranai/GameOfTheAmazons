@@ -129,6 +129,17 @@ public class AmazonLogic extends Observable implements MouseListener {
 		GUI.repaint();
 	}
 
+	public void endTurn() {
+		currentTurn = !currentTurn;
+		GUI.validate();
+		GUI.repaint();
+		if (checkMoves()) {
+			System.out.println("Game over!");
+		}
+		setChanged();
+		notifyObservers();
+	}
+
 	public boolean checkMoves() {
 		boolean whiteDead = true, blackDead = true;
 

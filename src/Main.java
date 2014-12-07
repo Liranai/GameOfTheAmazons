@@ -8,14 +8,15 @@ public class Main {
 	public static void main(String[] args) {
 		InfoPanel panel = new InfoPanel();
 		ArtificialIntelligence selectedAI = new mcts2(false);
+		ArtificialIntelligence selectedAI2 = new mcts2(true);
+		// ArtificialIntelligence selectedAI = null;
 
-		AmazonLogic logic;
-		if (selectedAI != null)
-			logic = new AmazonLogic(panel, selectedAI);
-		else
-			logic = new AmazonLogic(panel);
+		AmazonLogic logic = new AmazonLogic(panel);
+		if (selectedAI != null) {
+			logic.addObserver(selectedAI);
+			logic.addObserver(selectedAI2);
+		}
 		logic.addObserver(panel);
-		logic.addObserver(selectedAI);
 
 		// Board board = new Board();
 		// AmazonUI ui = new AmazonUI(board);

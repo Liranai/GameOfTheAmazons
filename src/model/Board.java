@@ -118,7 +118,12 @@ public class Board {
 
 	public void move(Queen queen, Point target, Point arrow) {
 		field[queen.getPosition().x][queen.getPosition().y] = GameObject.Empty;
-		queen.move(target);
+		for (Queen newQueen : queens) {
+			if (newQueen.getPosition().equals(queen.getPosition())) {
+				newQueen.move(target);
+				queen.move(target);
+			}
+		}
 		if (queen.isColor())
 			field[queen.getPosition().x][queen.getPosition().y] = GameObject.AmazonWhite;
 		else
