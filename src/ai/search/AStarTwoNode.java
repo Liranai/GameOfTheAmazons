@@ -13,6 +13,8 @@ public class AStarTwoNode {
 	private Status status = Status.unexplored;
 	@Setter
 	private AStarTwoNode parent;
+	@Setter
+	private AStarTwoNode counterMove;
 	private Move move;
 	private Board augmentedBoard, board;
 
@@ -33,11 +35,16 @@ public class AStarTwoNode {
 		g = (double) i;
 
 		if (move != null)
+			// h = MobilityTerritory.TM(augmentedBoard,
+			// move.getQueen().isColor());
 			h = augmentedBoard.getMobility(move.getQueen().isColor());
 		else
 			h = 0.0;
 
 		f = g + h;
+		if (counterMove != null) {
+			f = f - (counterMove.getF() / 10);
+		}
 	}
 
 	@Override

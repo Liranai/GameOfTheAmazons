@@ -97,6 +97,33 @@ public class Board {
 		}
 	}
 
+	public void printBoard() {
+		for (int i = 0; i < field.length; i++) {
+			for (int j = 0; j < field[0].length; j++) {
+				switch (field[j][i]) {
+				case AmazonBlack:
+					System.out.print("[q] ");
+					break;
+				case AmazonWhite:
+					System.out.print("[Q] ");
+					break;
+				case Arrow:
+					System.out.print("[x] ");
+					break;
+				case Empty:
+					System.out.print("[ ] ");
+					break;
+				default:
+					break;
+
+				}
+			}
+			System.out.print("\n");
+		}
+
+		System.out.println("\n-------------------------------------------------------\n");
+	}
+
 	public boolean isGameOver() {
 		boolean whiteDead = true;
 		boolean blackDead = true;

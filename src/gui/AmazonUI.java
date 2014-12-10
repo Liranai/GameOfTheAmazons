@@ -85,7 +85,9 @@ public class AmazonUI extends JFrame {
 
 	@Override
 	public void repaint() {
+		super.validate();
 		super.repaint();
+		boardPanel.validate();
 		boardPanel.repaint();
 	}
 }

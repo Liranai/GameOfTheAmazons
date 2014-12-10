@@ -13,6 +13,8 @@ import ai.search.NodeTwoComparator;
 
 public class AStarTwoAI extends ArtificialIntelligence {
 
+	public static final int ITERATIONS = 15;
+
 	public AStarTwoAI(boolean color) {
 		super(color);
 		// TODO Auto-generated constructor stub
@@ -24,7 +26,7 @@ public class AStarTwoAI extends ArtificialIntelligence {
 			Board board = ((AmazonLogic) obser).getBoard();
 			PriorityQueue<AStarTwoNode> queue = new PriorityQueue<AStarTwoNode>(10, new NodeTwoComparator());
 
-			// System.out.println("Running: AStar2.0");
+			System.out.println("Running: AStar2.0");
 
 			explore(board.clone(), queue, null);
 			// System.out.println(queue.size());
@@ -34,9 +36,15 @@ public class AStarTwoAI extends ArtificialIntelligence {
 			}
 
 			int i = 0;
-			while (queue.size() > 2 && i < 15) {
+			while (queue.size() > 2 && i < AStarTwoAI.ITERATIONS) {
 				AStarTwoNode tNode = queue.poll();
-				System.out.print(".");
+				// if (AStarTwoAI.ITERATIONS > 50) {
+				// if (i % (AStarTwoAI.ITERATIONS / 50) == 0) {
+				// System.out.print(".");
+				// }
+				// } else {
+				// System.out.print(".");
+				// }
 				// System.out.println("Node: " + i + " " + queue.size());
 				explore(tNode.getAugmentedBoard(), queue, tNode);
 				i++;
@@ -47,20 +55,16 @@ public class AStarTwoAI extends ArtificialIntelligence {
 				node = node.getParent();
 			}
 
-			System.out.println("For: " + (color ? " White" : " Black") + " nodes: " + queue.size());
-			System.out.println(node.getMove().getQueen().getPosition() + " to " + node.getMove().getTarget() + " targeting " + node.getMove().getArrow());
+			System.out.println(" For: " + (color ? " White" : " Black") + " nodes: " + queue.size() + " value: " + node.getF());
+			// System.out.println(node.getMove().getQueen().getPosition() +
+			// " to " + node.getMove().getTarget() + " targeting " +
+			// node.getMove().getArrow());
 
 			if (node.getMove().validate(board)) {
 				board.move(node.getMove());
 			}
 
-			((AmazonLogic) obser).getGUI().repaint();
 			((AmazonLogic) obser).endTurn();
-
-			// ((AmazonLogic) obser).setBoard(board);
-
-			// ((AmazonLogic) obser).setCurrentTurn(!color);
-
 		}
 	}
 
@@ -86,6 +90,7 @@ public class AStarTwoAI extends ArtificialIntelligence {
 										Move move = new Move(queen, p, arrow);
 										AStarTwoNode node = new AStarTwoNode(move.clone(), board.clone());
 										node.setParent(parent);
+										// node.setCounterMove(getCounterMove(node));
 										node.evaluate();
 										queue.add(node);
 									} else {
@@ -100,6 +105,43 @@ public class AStarTwoAI extends ArtificialIntelligence {
 				}
 			}
 		}
+	}
+
+	public AStarTwoNode getCounterMove(AStarTwoNode node) {
+		PriorityQueue<AStarTwoNode> queue = new PriorityQueue<AStarTwoNode>(10, new NodeTwoComparator());
+
+		for (Queen queen : node.getAugmentedBoard().getQueens()) {
+			if (queen.isColor() == !color) {
+
+				for (int i = 0; i < Board.DIRECTIONS.length; i++) {
+					Point p = new Point(queen.getPosition().x, queen.getPosition().y);
+					while (p.x >= 0 && p.y >= 0 && p.x < 10 && p.y < 10) {
+						p.translate(Board.DIRECTIONS[i][0], Board.DIRECTIONS[i][1]);
+						if (node.getAugmentedBoard().isEmpty(p)) {
+
+							for (int j = 0; j < Board.DIRECTIONS.length; j++) {
+								Point arrow = new Point(p.x, p.y);
+								while (arrow.x >= 0 && arrow.y >= 0 && arrow.x < 10 && arrow.y < 10) {
+									arrow.translate(Board.DIRECTIONS[j][0], Board.DIRECTIONS[j][1]);
+									if (node.getAugmentedBoard().isEmpty(arrow) || arrow.equals(queen.getPosition())) {
+										Move move = new Move(queen, p, arrow);
+										AStarTwoNode newNode = new AStarTwoNode(move.clone(), node.getAugmentedBoard().clone());
+										newNode.evaluate();
+										queue.add(newNode);
+									} else {
+										break;
+									}
+								}
+							}
+						} else {
+							break;
+						}
+					}
+				}
+			}
+		}
+
+		return queue.poll();
 	}
 
 }

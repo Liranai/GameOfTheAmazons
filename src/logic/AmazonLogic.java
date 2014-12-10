@@ -132,10 +132,17 @@ public class AmazonLogic extends Observable implements MouseListener {
 
 	}
 
+	public void setBoard(Board board) {
+		this.board = board;
+	}
+
 	public void endTurn() {
 		currentTurn = !currentTurn;
+		board.printBoard();
 		GUI.validate();
 		GUI.repaint();
+
+		System.out.println("Board repainted");
 		if (checkMoves()) {
 			System.out.println("Game over!");
 		}
