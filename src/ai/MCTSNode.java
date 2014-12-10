@@ -6,6 +6,7 @@ import lombok.Getter;
 import model.Board;
 import model.Move;
 import evaluation.Mobility;
+import evaluation.MobilityTerritory;
 
 @Getter
 public class MCTSNode {
@@ -31,7 +32,8 @@ public class MCTSNode {
 		}
 	}
 
-	int calculateValue(boolean color) {
-		return Mobility.getMobilityFeature(color, board);
+	double calculateValue(boolean color) {
+		//System.out.println(color);
+		return board.getMobility(color);
 	}
 }

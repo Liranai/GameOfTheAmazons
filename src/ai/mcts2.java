@@ -31,13 +31,16 @@ public class mcts2 extends ArtificialIntelligence {
 			Move move = getMove(board);
 
 			System.out.println("Q: " + move.getQueen().getPosition() + " T: " + move.getTarget() + " A: " + move.getArrow());
-
+			
 			if (move.validate(board)) {
 				board.move(move.getQueen(), move.getTarget(), move.getArrow());
 			}
-
+			
+			
 			((AmazonLogic) obser).endTurn();
 			((AmazonLogic) obser).getGUI().repaint();
+			
+			
 		}
 	}
 
@@ -55,7 +58,7 @@ public class mcts2 extends ArtificialIntelligence {
 		}
 
 		System.out.println(firstChildren.size());
-
+		
 		return max.getMove();
 	}
 
@@ -120,7 +123,7 @@ public class mcts2 extends ArtificialIntelligence {
 			MCTSNode newNode = randomMove(root, turn);
 			result = MCTSSearch(newNode, g - 1, !turn);
 		} else {
-			result = root.calculateValue(!turn);
+			result = root.calculateValue(turn);
 		}
 		return result;
 	}

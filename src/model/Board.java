@@ -212,4 +212,35 @@ public class Board {
 		// g2.drawImage(AmazonUI.Queen_White.getScaledInstance(AmazonUI.SQUARESIZE,
 		// AmazonUI.SQUARESIZE, 0), 100, 100, null);
 	}
+	public double getMobility(boolean color) {
+		int whiteMoves = 0;
+		int blackMoves = 0;
+
+		for (Queen queen : queens) {
+			int movement = 0;
+
+			for (int i = 0; i < DIRECTIONS.length; i++) {
+				Point p = new Point(queen.getPosition().x, queen.getPosition().y);
+				while (p.x >= 0 && p.y >= 0 && p.x < 10 && p.y < 10) {
+					p.translate(DIRECTIONS[i][0], DIRECTIONS[i][1]);
+					if (this.isEmpty(p)) {
+						movement++;
+					} else {
+						break;
+					}
+				}
+			}
+			if (queen.isColor()) {
+				whiteMoves += movement;
+			} else {
+				blackMoves += movement;
+			}
+		}
+
+		if (color) {
+			return blackMoves - whiteMoves;
+		} else {
+			return whiteMoves - blackMoves;
+		}
+	}
 }
