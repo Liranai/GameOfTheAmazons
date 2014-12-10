@@ -30,7 +30,7 @@ public class Territory {
 		System.out.println(whiteSquares);
 		System.out.println(evenSquares);
 		System.out.println(blackSquares);
-		if(currentTurn = true)
+		if(currentTurn)
 			return (whiteSquares - blackSquares); 
 		else 
 			return (blackSquares - whiteSquares); 
