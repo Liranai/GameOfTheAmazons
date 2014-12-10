@@ -20,7 +20,7 @@ public class Mobility {
 	public static int getMobilityFeature(boolean colour, Board board){
 		int whiteMobility = getMobility(true,board);
 		int blackMobility = getMobility(false,board);
-		if(colour = true){
+		if(colour){
 			return whiteMobility - blackMobility;
 		}
 		else{
