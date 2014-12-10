@@ -28,7 +28,7 @@ public class MobilityTerritory {
 			else if(whiteStonePly < blackStonePly)
 				whitePoints = whitePoints + weight + whiteMob[p.x][p.y]; 
 	}
-		if(currentTurn = true)
+		if(currentTurn)
 			return (whitePoints - blackPoints); 
 		else 
 			return (blackPoints - whitePoints); 
