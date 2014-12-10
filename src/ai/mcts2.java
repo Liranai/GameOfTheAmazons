@@ -39,7 +39,7 @@ public class mcts2 extends ArtificialIntelligence {
 			
 			((AmazonLogic) obser).endTurn();
 			((AmazonLogic) obser).getGUI().repaint();
-			((AmazonLogic) obser).endTurn();
+			//((AmazonLogic) obser).endTurn();
 			
 		}
 	}
