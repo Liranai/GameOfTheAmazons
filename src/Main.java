@@ -1,5 +1,6 @@
 import gui.InfoPanel;
 import logic.AmazonLogic;
+import ai.AStarTwoAI;
 import ai.ArtificialIntelligence;
 import ai.mcts2;
 

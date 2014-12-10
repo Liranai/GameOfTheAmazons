@@ -243,4 +243,27 @@ public class Board {
 			return whiteMoves - blackMoves;
 		}
 	}
+	public boolean isGameOver() {
+		boolean whiteDead = true;
+		boolean blackDead = true;
+
+		for (Queen queen : queens) {
+			for (int i = 0; i < DIRECTIONS.length; i++) {
+				Point p = new Point(queen.getPosition().x, queen.getPosition().y);
+				p.translate(DIRECTIONS[i][0], DIRECTIONS[i][1]);
+				if (this.isEmpty(p)) {
+					if (queen.isColor()) {
+						whiteDead = false;
+					} else {
+						blackDead = false;
+					}
+				}
+			}
+		}
+
+		if (blackDead || whiteDead) {
+			return true;
+		}
+		return false;
+	}
 }

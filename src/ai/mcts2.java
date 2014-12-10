@@ -15,8 +15,8 @@ public class mcts2 extends ArtificialIntelligence {
 	private Vector<MCTSNode> firstChildren;
 	// private Board board;
 
-	private static final int depth = 4;
-	private static final int iterations = 50;
+	private static final int depth = 3;
+	private static final int iterations = 25;
 
 	public mcts2(boolean color) {
 		super(color);
@@ -30,7 +30,7 @@ public class mcts2 extends ArtificialIntelligence {
 
 			Move move = getMove(board);
 
-			System.out.println("Q: " + move.getQueen().getPosition() + " T: " + move.getTarget() + " A: " + move.getArrow());
+			//System.out.println("Q: " + move.getQueen().getPosition() + " T: " + move.getTarget() + " A: " + move.getArrow());
 			
 			if (move.validate(board)) {
 				board.move(move.getQueen(), move.getTarget(), move.getArrow());
@@ -45,6 +45,7 @@ public class mcts2 extends ArtificialIntelligence {
 	}
 
 	public Move getMove(Board board) {
+		
 		fillChildren(board);
 		setValues();
 
@@ -52,12 +53,12 @@ public class mcts2 extends ArtificialIntelligence {
 		for (MCTSNode node : firstChildren) {
 			if (max.getAverage() < node.getAverage()) {
 				max = node;
-				System.out.println("Choose: " + firstChildren.indexOf(node));
-				System.out.println("New value: " + max.getAverage());
+				//System.out.println("Choose: " + firstChildren.indexOf(node));
+				//System.out.println("New value: " + max.getAverage());
 			}
 		}
 
-		System.out.println(firstChildren.size());
+		//System.out.println(firstChildren.size());
 		
 		return max.getMove();
 	}
@@ -99,6 +100,7 @@ public class mcts2 extends ArtificialIntelligence {
 	}
 
 	public void setValues() {
+
 		System.out.println(firstChildren.size());
 		for (int i = 0; i < firstChildren.size(); i++) {
 			// System.out.println("child number " + i);
