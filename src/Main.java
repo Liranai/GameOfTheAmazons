@@ -2,6 +2,7 @@ import gui.InfoPanel;
 import logic.AmazonLogic;
 import ai.AStarTwoAI;
 import ai.ArtificialIntelligence;
+import ai.RandomAI;
 import ai.mcts2;
 
 public class Main {
@@ -9,7 +10,7 @@ public class Main {
 	public static void main(String[] args) {
 		InfoPanel panel = new InfoPanel();
 		ArtificialIntelligence selectedAI = new mcts2(false);
-		ArtificialIntelligence selectedAI2 = new mcts2(true);
+		ArtificialIntelligence selectedAI2 = new RandomAI(true);
 		// ArtificialIntelligence selectedAI = null;
 
 		AmazonLogic logic = new AmazonLogic(panel);

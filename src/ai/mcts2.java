@@ -39,7 +39,7 @@ public class mcts2 extends ArtificialIntelligence {
 			
 			((AmazonLogic) obser).endTurn();
 			((AmazonLogic) obser).getGUI().repaint();
-			
+			((AmazonLogic) obser).endTurn();
 			
 		}
 	}
@@ -57,7 +57,7 @@ public class mcts2 extends ArtificialIntelligence {
 				//System.out.println("New value: " + max.getAverage());
 			}
 		}
-
+		
 		//System.out.println(firstChildren.size());
 		
 		return max.getMove();

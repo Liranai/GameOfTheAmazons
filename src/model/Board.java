@@ -65,11 +65,91 @@ public class Board {
 		return null;
 	}
 
+	public double getMobility(boolean color) {
+		int whiteMoves = 0;
+		int blackMoves = 0;
+
+		for (Queen queen : queens) {
+			int movement = 0;
+
+			for (int i = 0; i < DIRECTIONS.length; i++) {
+				Point p = new Point(queen.getPosition().x, queen.getPosition().y);
+				while (p.x >= 0 && p.y >= 0 && p.x < 10 && p.y < 10) {
+					p.translate(DIRECTIONS[i][0], DIRECTIONS[i][1]);
+					if (this.isEmpty(p)) {
+						movement++;
+					} else {
+						break;
+					}
+				}
+			}
+			if (queen.isColor()) {
+				whiteMoves += movement;
+			} else {
+				blackMoves += movement;
+			}
+		}
+
+		if (color) {
+			return blackMoves - whiteMoves;
+		} else {
+			return whiteMoves - blackMoves;
+		}
+	}
+
+	public void printBoard() {
+		for (int i = 0; i < field.length; i++) {
+			for (int j = 0; j < field[0].length; j++) {
+				switch (field[j][i]) {
+				case AmazonBlack:
+					System.out.print("[q] ");
+					break;
+				case AmazonWhite:
+					System.out.print("[Q] ");
+					break;
+				case Arrow:
+					System.out.print("[x] ");
+					break;
+				case Empty:
+					System.out.print("[ ] ");
+					break;
+				default:
+					break;
+
+				}
+			}
+			System.out.print("\n");
+		}
+
+		System.out.println("\n-------------------------------------------------------\n");
+	}
+
+	public boolean isGameOver() {
+		boolean whiteDead = true;
+		boolean blackDead = true;
+
+		for (Queen queen : queens) {
+			for (int i = 0; i < DIRECTIONS.length; i++) {
+				Point p = new Point(queen.getPosition().x, queen.getPosition().y);
+				p.translate(DIRECTIONS[i][0], DIRECTIONS[i][1]);
+				if (this.isEmpty(p)) {
+					if (queen.isColor()) {
+						whiteDead = false;
+					} else {
+						blackDead = false;
+					}
+				}
+			}
+		}
+
+		if (blackDead || whiteDead) {
+			return true;
+		}
+		return false;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
-		System.out.println("Q: " + queens + " A: " + arrows);
-		System.out.println("Q: " + ((Board) obj).getQueens() + " A: " + ((Board) obj).getArrows());
-
 		for (int i = 0; i < queens.size(); i++) {
 			if (!((Board) obj).getQueens().get(i).getPosition().equals(queens.get(i).getPosition())) {
 				return false;
@@ -81,8 +161,6 @@ public class Board {
 			}
 		}
 		return true;
-		// return (((Board) obj).getQueens().equals(queens) && (((Board)
-		// obj).getArrows().equals(arrows)));
 	}
 
 	public Board clone() {
@@ -118,12 +196,7 @@ public class Board {
 
 	public void move(Queen queen, Point target, Point arrow) {
 		field[queen.getPosition().x][queen.getPosition().y] = GameObject.Empty;
-		for (Queen newQueen : queens) {
-			if (newQueen.getPosition().equals(queen.getPosition())) {
-				newQueen.move(target);
-				queen.move(target);
-			}
-		}
+		queen.move(target);
 		if (queen.isColor())
 			field[queen.getPosition().x][queen.getPosition().y] = GameObject.AmazonWhite;
 		else
@@ -211,59 +284,5 @@ public class Board {
 		// TODO: Make image scale
 		// g2.drawImage(AmazonUI.Queen_White.getScaledInstance(AmazonUI.SQUARESIZE,
 		// AmazonUI.SQUARESIZE, 0), 100, 100, null);
-	}
-	public double getMobility(boolean color) {
-		int whiteMoves = 0;
-		int blackMoves = 0;
-
-		for (Queen queen : queens) {
-			int movement = 0;
-
-			for (int i = 0; i < DIRECTIONS.length; i++) {
-				Point p = new Point(queen.getPosition().x, queen.getPosition().y);
-				while (p.x >= 0 && p.y >= 0 && p.x < 10 && p.y < 10) {
-					p.translate(DIRECTIONS[i][0], DIRECTIONS[i][1]);
-					if (this.isEmpty(p)) {
-						movement++;
-					} else {
-						break;
-					}
-				}
-			}
-			if (queen.isColor()) {
-				whiteMoves += movement;
-			} else {
-				blackMoves += movement;
-			}
-		}
-
-		if (color) {
-			return blackMoves - whiteMoves;
-		} else {
-			return whiteMoves - blackMoves;
-		}
-	}
-	public boolean isGameOver() {
-		boolean whiteDead = true;
-		boolean blackDead = true;
-
-		for (Queen queen : queens) {
-			for (int i = 0; i < DIRECTIONS.length; i++) {
-				Point p = new Point(queen.getPosition().x, queen.getPosition().y);
-				p.translate(DIRECTIONS[i][0], DIRECTIONS[i][1]);
-				if (this.isEmpty(p)) {
-					if (queen.isColor()) {
-						whiteDead = false;
-					} else {
-						blackDead = false;
-					}
-				}
-			}
-		}
-
-		if (blackDead || whiteDead) {
-			return true;
-		}
-		return false;
 	}
 }
