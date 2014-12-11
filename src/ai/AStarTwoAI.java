@@ -13,7 +13,7 @@ import ai.search.NodeTwoComparator;
 
 public class AStarTwoAI extends ArtificialIntelligence {
 
-	public static final int ITERATIONS = 15;
+	public static final int ITERATIONS = 50;
 
 	public AStarTwoAI(boolean color) {
 		super(color);
@@ -26,10 +26,9 @@ public class AStarTwoAI extends ArtificialIntelligence {
 			Board board = ((AmazonLogic) obser).getBoard();
 			PriorityQueue<AStarTwoNode> queue = new PriorityQueue<AStarTwoNode>(10, new NodeTwoComparator());
 
-			System.out.println("Running: AStar2.0");
+			// System.out.println("Running: AStar2.0");
 
 			explore(board.clone(), queue, null);
-			// System.out.println(queue.size());
 
 			if (queue.size() == 0) {
 				return;
@@ -38,14 +37,13 @@ public class AStarTwoAI extends ArtificialIntelligence {
 			int i = 0;
 			while (queue.size() > 2 && i < AStarTwoAI.ITERATIONS) {
 				AStarTwoNode tNode = queue.poll();
-				// if (AStarTwoAI.ITERATIONS > 50) {
-				// if (i % (AStarTwoAI.ITERATIONS / 50) == 0) {
-				// System.out.print(".");
-				// }
-				// } else {
-				// System.out.print(".");
-				// }
-				// System.out.println("Node: " + i + " " + queue.size());
+				if (AStarTwoAI.ITERATIONS > 50) {
+					if (i % (AStarTwoAI.ITERATIONS / 50) == 0) {
+						System.out.print(".");
+					}
+				} else {
+					System.out.print(".");
+				}
 				explore(tNode.getAugmentedBoard(), queue, tNode);
 				i++;
 			}
