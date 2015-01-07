@@ -13,7 +13,7 @@ import ai.search.NodeTwoComparator;
 
 public class AStarTwoAI extends ArtificialIntelligence {
 
-	public static final int ITERATIONS = 50;
+	public static final int ITERATIONS = 150;
 
 	public AStarTwoAI(boolean color) {
 		super(color);

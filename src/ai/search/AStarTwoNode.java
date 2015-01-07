@@ -41,7 +41,7 @@ public class AStarTwoNode {
 		else
 			h = 0.0;
 
-		f = g + h;
+		f = g + h + (Math.random() / 10.0);
 		if (counterMove != null) {
 			f = f - (counterMove.getF() / 10);
 		}
