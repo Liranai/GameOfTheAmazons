@@ -6,19 +6,19 @@ import model.Board;
 import model.Move;
 
 @Getter
-public class AStarNode {
+public class AStarThreeNode {
 
 	private double g, h, f;
 	@Setter
 	private Status status = Status.unexplored;
 	@Setter
-	private AStarNode parent;
+	private AStarThreeNode parent;
 	@Setter
-	private AStarNode counterMove;
+	private AStarThreeNode counterMove;
 	private Move move;
 	private Board augmentedBoard, board;
 
-	public AStarNode(Move move, Board board) {
+	public AStarThreeNode(Move move, Board board) {
 		this.board = board;
 		this.move = move;
 		augmentedBoard = board.clone();
@@ -26,7 +26,7 @@ public class AStarNode {
 	}
 
 	public void evaluate() {
-		AStarNode n = this;
+		AStarThreeNode n = this;
 		int i = 0;
 		while (n != null) {
 			i++;
@@ -41,15 +41,15 @@ public class AStarNode {
 		else
 			h = 0.0;
 
-		f = g + h + (Math.random() / 1000.0);
+		f = g + h + (Math.random() / 10.0);
 		if (counterMove != null) {
-			f = f + (counterMove.getF() / 10);
+			f = f - (counterMove.getF() / 10);
 		}
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		return (((AStarNode) obj).getBoard().equals(board) && (((AStarNode) obj).getMove().equals(move)));
+		return (((AStarThreeNode) obj).getBoard().equals(board) && (((AStarThreeNode) obj).getMove().equals(move)));
 	}
 
 	public enum Status {

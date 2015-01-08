@@ -1,5 +1,6 @@
 import gui.InfoPanel;
 import logic.AmazonLogic;
+import ai.AStarThreeAI;
 import ai.AStarTwoAI;
 import ai.ArtificialIntelligence;
 
@@ -11,15 +12,19 @@ public class Main {
 
 		InfoPanel panel = new InfoPanel();
 		ArtificialIntelligence selectedAI = new AStarTwoAI(false);
-		ArtificialIntelligence selectedAI2 = new AStarTwoAI(true);
-		// ArtificialIntelligence selectedAI = null;
+		ArtificialIntelligence selectedAI2 = new AStarThreeAI(true);
 
-		AmazonLogic logic = new AmazonLogic(panel);
-		if (selectedAI != null) {
-			logic.addObserver(selectedAI);
-			logic.addObserver(selectedAI2);
+		AmazonLogic logic = null;
+		if (selectedAI2 != null)
+			logic = new AmazonLogic(panel, selectedAI, selectedAI2);
+		else if (selectedAI != null) {
+			logic = new AmazonLogic(panel, selectedAI);
+		} else {
+			logic = new AmazonLogic(panel);
 		}
-		logic.addObserver(panel);
+		Thread t = new Thread(logic);
+		t.start();
+		// logic.addObserver(panel);
 
 		// Board board = new Board();
 		// AmazonUI ui = new AmazonUI(board);

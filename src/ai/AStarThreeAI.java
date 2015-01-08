@@ -6,81 +6,70 @@ import java.util.Vector;
 
 import model.Board;
 import model.Move;
+import model.Pair;
 import model.Queen;
-import ai.search.AStarNode;
-import ai.search.NodeComparator;
+import ai.search.AStarThreeNode;
+import ai.search.NodeThreeComparator;
 
-public class AStarAI extends ArtificialIntelligence {
+public class AStarThreeAI extends ArtificialIntelligence {
 
 	public static final int ITERATIONS = 150;
-	public static final int PRIMARY_NODES = 50;
 
-	public AStarAI(boolean color) {
+	private Vector<Pair<Queen, Integer>>[][] datamap;
+
+	public AStarThreeAI(boolean color) {
 		super(color);
 		// TODO Auto-generated constructor stub
+
+		datamap = (Vector<Pair<Queen, Integer>>[][]) new Object[10][10];
 	}
 
 	@Override
 	public Move getMove(Board board) {
-		PriorityQueue<AStarNode> queue = new PriorityQueue<AStarNode>(10, new NodeComparator());
+		PriorityQueue<AStarThreeNode> queue = new PriorityQueue<AStarThreeNode>(10, new NodeThreeComparator());
 
-		// System.out.println("Running: AStar2.0");
+		evaluateBoard(board);
 
-		explore(board.clone(), queue, null);
+		Queen queen = findQueen(board);
+		System.out.println("AStar3.0  -  Targeting: " + queen.getPosition());
 
-		if (queue.size() == 0) {
-			return null;
-		}
+		Move move = findMove(board, queen);
 
-		int i = 0;
-		while (queue.size() > 2 && i < AStarTwoAI.ITERATIONS) {
-
-			Vector<AStarNode> list = new Vector<AStarNode>();
-			if (queue.size() >= AStarAI.PRIMARY_NODES) {
-				for (int j = 0; j < AStarAI.PRIMARY_NODES; j++) {
-					AStarNode node = queue.poll();
-					node.setCounterMove(getCounterMove(node));
-					node.evaluate();
-					list.add(node);
-				}
-			} else {
-				while (queue.size() > 0) {
-					AStarNode node = queue.poll();
-					node.setCounterMove(getCounterMove(node));
-					node.evaluate();
-					list.add(node);
-				}
-			}
-
-			queue = new PriorityQueue<AStarNode>(10, new NodeComparator());
-			for (AStarNode node : list) {
-				queue.add(node);
-			}
-
-			AStarNode tNode = queue.poll();
-			if (AStarTwoAI.ITERATIONS > 50) {
-				if (i % (AStarTwoAI.ITERATIONS / 50) == 0) {
-					System.out.print(".");
-				}
-			} else {
-				System.out.print(".");
-			}
-			explore(tNode.getAugmentedBoard(), queue, tNode);
-			i++;
-		}
-
-		AStarNode node = queue.peek();
-		while (node.getParent() != null) {
-			node = node.getParent();
-		}
-
-		System.out.println("\n For: " + (color ? " White" : " Black") + " nodes: " + queue.size() + " value: " + node.getF());
-		System.out.println(node.getMove().getQueen().getPosition() + " to " + node.getMove().getTarget() + " targeting " + node.getMove().getArrow());
+		// explore(board.clone(), queue, null);
+		//
+		// if (queue.size() == 0) {
+		// return null;
+		// }
+		//
+		// int i = 0;
+		// while (queue.size() > 2 && i < AStarThreeAI.ITERATIONS) {
+		// AStarThreeNode tNode = queue.poll();
+		// if (AStarThreeAI.ITERATIONS > 50) {
+		// if (i % (AStarThreeAI.ITERATIONS / 50) == 0) {
+		// System.out.print(".");
+		// }
+		// } else {
+		// System.out.print(".");
+		// }
+		// explore(tNode.getAugmentedBoard(), queue, tNode);
+		// i++;
+		// }
+		//
+		// AStarThreeNode node = queue.peek();
+		// while (node.getParent() != null) {
+		// node = node.getParent();
+		// }
+		//
+		// System.out.println("\n For: " + (color ? " White" : " Black") +
+		// " nodes: " + queue.size() + " value: " + node.getF());
+		// System.out.println(node.getMove().getQueen().getPosition() + " to " +
+		// node.getMove().getTarget() + " targeting " +
+		// node.getMove().getArrow());
 
 		return node.getMove();
 	}
 
-	public void explore(Board board, PriorityQueue<AStarNode> queue, AStarNode parent) {
+	public void explore(Board board, PriorityQueue<AStarThreeNode> queue, AStarThreeNode parent) {
 		if (board.isGameOver()) {
 			return;
 		}
@@ -100,7 +89,7 @@ public class AStarAI extends ArtificialIntelligence {
 									arrow.translate(Board.DIRECTIONS[j][0], Board.DIRECTIONS[j][1]);
 									if (board.isEmpty(arrow) || arrow.equals(queen.getPosition())) {
 										Move move = new Move(queen, p, arrow);
-										AStarNode node = new AStarNode(move.clone(), board.clone());
+										AStarThreeNode node = new AStarThreeNode(move.clone(), board.clone());
 										node.setParent(parent);
 										// node.setCounterMove(getCounterMove(node));
 										node.evaluate();
@@ -119,8 +108,8 @@ public class AStarAI extends ArtificialIntelligence {
 		}
 	}
 
-	public AStarNode getCounterMove(AStarNode node) {
-		PriorityQueue<AStarNode> queue = new PriorityQueue<AStarNode>(10, new NodeComparator());
+	public AStarThreeNode getCounterMove(AStarThreeNode node) {
+		PriorityQueue<AStarThreeNode> queue = new PriorityQueue<AStarThreeNode>(10, new NodeThreeComparator());
 
 		for (Queen queen : node.getAugmentedBoard().getQueens()) {
 			if (queen.isColor() == !color) {
@@ -137,7 +126,7 @@ public class AStarAI extends ArtificialIntelligence {
 									arrow.translate(Board.DIRECTIONS[j][0], Board.DIRECTIONS[j][1]);
 									if (node.getAugmentedBoard().isEmpty(arrow) || arrow.equals(queen.getPosition())) {
 										Move move = new Move(queen, p, arrow);
-										AStarNode newNode = new AStarNode(move.clone(), node.getAugmentedBoard().clone());
+										AStarThreeNode newNode = new AStarThreeNode(move.clone(), node.getAugmentedBoard().clone());
 										newNode.evaluate();
 										queue.add(newNode);
 									} else {

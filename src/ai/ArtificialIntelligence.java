@@ -1,15 +1,17 @@
 package ai;
 
-import java.util.Observable;
-import java.util.Observer;
+import lombok.Getter;
+import model.Board;
+import model.Move;
 
-public abstract class ArtificialIntelligence implements Observer {
+public abstract class ArtificialIntelligence {
 
+	@Getter
 	protected boolean color;
 
 	public ArtificialIntelligence(boolean color) {
 		this.color = color;
 	}
 
-	public abstract void update(Observable arg0, Object arg1);
+	public abstract Move getMove(Board board);
 }

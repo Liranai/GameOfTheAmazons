@@ -1,10 +1,8 @@
 package ai;
 
 import java.awt.Point;
-import java.util.Observable;
 import java.util.PriorityQueue;
 
-import logic.AmazonLogic;
 import model.Board;
 import model.Move;
 import model.Queen;
@@ -21,50 +19,89 @@ public class AStarTwoAI extends ArtificialIntelligence {
 	}
 
 	@Override
-	public void update(Observable obser, Object obj) {
-		if (((AmazonLogic) obser).isCurrentTurn() == color) {
-			Board board = ((AmazonLogic) obser).getBoard();
-			PriorityQueue<AStarTwoNode> queue = new PriorityQueue<AStarTwoNode>(10, new NodeTwoComparator());
+	public Move getMove(Board board) {
+		PriorityQueue<AStarTwoNode> queue = new PriorityQueue<AStarTwoNode>(10, new NodeTwoComparator());
 
-			// System.out.println("Running: AStar2.0");
+		// System.out.println("Running: AStar2.0");
 
-			explore(board.clone(), queue, null);
+		explore(board.clone(), queue, null);
 
-			if (queue.size() == 0) {
-				return;
-			}
+		if (queue.size() == 0) {
+			return null;
+		}
 
-			int i = 0;
-			while (queue.size() > 2 && i < AStarTwoAI.ITERATIONS) {
-				AStarTwoNode tNode = queue.poll();
-				if (AStarTwoAI.ITERATIONS > 50) {
-					if (i % (AStarTwoAI.ITERATIONS / 50) == 0) {
-						System.out.print(".");
-					}
-				} else {
+		int i = 0;
+		while (queue.size() > 2 && i < AStarTwoAI.ITERATIONS) {
+			AStarTwoNode tNode = queue.poll();
+			if (AStarTwoAI.ITERATIONS > 50) {
+				if (i % (AStarTwoAI.ITERATIONS / 50) == 0) {
 					System.out.print(".");
 				}
-				explore(tNode.getAugmentedBoard(), queue, tNode);
-				i++;
+			} else {
+				System.out.print(".");
 			}
-
-			AStarTwoNode node = queue.peek();
-			while (node.getParent() != null) {
-				node = node.getParent();
-			}
-
-			System.out.println(" For: " + (color ? " White" : " Black") + " nodes: " + queue.size() + " value: " + node.getF());
-			// System.out.println(node.getMove().getQueen().getPosition() +
-			// " to " + node.getMove().getTarget() + " targeting " +
-			// node.getMove().getArrow());
-
-			if (node.getMove().validate(board)) {
-				board.move(node.getMove());
-			}
-
-			((AmazonLogic) obser).endTurn();
+			explore(tNode.getAugmentedBoard(), queue, tNode);
+			i++;
 		}
+
+		AStarTwoNode node = queue.peek();
+		while (node.getParent() != null) {
+			node = node.getParent();
+		}
+
+		System.out.println("\n For: " + (color ? " White" : " Black") + " nodes: " + queue.size() + " value: " + node.getF());
+		System.out.println(node.getMove().getQueen().getPosition() + " to " + node.getMove().getTarget() + " targeting " + node.getMove().getArrow());
+
+		return node.getMove();
 	}
+
+	// @Override
+	// public void update(Observable obser, Object obj) {
+	// if (((AmazonLogic) obser).isCurrentTurn() == color) {
+	// Board board = ((AmazonLogic) obser).getBoard();
+	// PriorityQueue<AStarTwoNode> queue = new PriorityQueue<AStarTwoNode>(10,
+	// new NodeTwoComparator());
+	//
+	// // System.out.println("Running: AStar2.0");
+	//
+	// explore(board.clone(), queue, null);
+	//
+	// if (queue.size() == 0) {
+	// return;
+	// }
+	//
+	// int i = 0;
+	// while (queue.size() > 2 && i < AStarTwoAI.ITERATIONS) {
+	// AStarTwoNode tNode = queue.poll();
+	// if (AStarTwoAI.ITERATIONS > 50) {
+	// if (i % (AStarTwoAI.ITERATIONS / 50) == 0) {
+	// System.out.print(".");
+	// }
+	// } else {
+	// System.out.print(".");
+	// }
+	// explore(tNode.getAugmentedBoard(), queue, tNode);
+	// i++;
+	// }
+	//
+	// AStarTwoNode node = queue.peek();
+	// while (node.getParent() != null) {
+	// node = node.getParent();
+	// }
+	//
+	// System.out.println(" For: " + (color ? " White" : " Black") + " nodes: "
+	// + queue.size() + " value: " + node.getF());
+	// // System.out.println(node.getMove().getQueen().getPosition() +
+	// // " to " + node.getMove().getTarget() + " targeting " +
+	// // node.getMove().getArrow());
+	//
+	// if (node.getMove().validate(board)) {
+	// board.move(node.getMove());
+	// }
+	//
+	// ((AmazonLogic) obser).endTurn();
+	// }
+	// }
 
 	public void explore(Board board, PriorityQueue<AStarTwoNode> queue, AStarTwoNode parent) {
 		if (board.isGameOver()) {
@@ -141,5 +178,4 @@ public class AStarTwoAI extends ArtificialIntelligence {
 
 		return queue.poll();
 	}
-
 }
