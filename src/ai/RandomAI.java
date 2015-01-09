@@ -1,10 +1,8 @@
 package ai;
 
 import java.awt.Point;
-import java.util.Observable;
 import java.util.Vector;
 
-import logic.AmazonLogic;
 import model.Board;
 import model.Move;
 import model.Queen;
@@ -20,7 +18,7 @@ public class RandomAI extends ArtificialIntelligence {
 		super(color);
 	}
 
-	public Move getMove() {
+	public Move findMove() {
 		getQueens(color);
 		Queen chosenQueen = fillMoveLocations();
 		Point target = chooseMove();
@@ -30,20 +28,32 @@ public class RandomAI extends ArtificialIntelligence {
 	}
 
 	@Override
-	public void update(Observable obser, Object obj) {
+	public Move getMove(Board board) {
 		queens = new Vector<Queen>();
 		moveLocations = new Vector<Point>();
 		shootLocations = new Vector<Point>();
 
-		this.board = ((AmazonLogic) obser).getBoard();
-		if (((AmazonLogic) obser).isCurrentTurn() == color) {
-			Move move = getMove();
-			move.validate(board);
-			board.move(move);
-			((AmazonLogic) obser).setCurrentTurn(!color);
-		}
-		((AmazonLogic) obser).getGUI().repaint();
+		Move move = findMove();
+
+		return move;
 	}
+
+	//
+	// @Override
+	// public void update(Observable obser, Object obj) {
+	// queens = new Vector<Queen>();
+	// moveLocations = new Vector<Point>();
+	// shootLocations = new Vector<Point>();
+	//
+	// this.board = ((AmazonLogic) obser).getBoard();
+	// if (((AmazonLogic) obser).isCurrentTurn() == color) {
+	// Move move = getMove();
+	// move.validate(board);
+	// board.move(move);
+	// ((AmazonLogic) obser).setCurrentTurn(!color);
+	// }
+	// ((AmazonLogic) obser).getGUI().repaint();
+	// }
 
 	private void getQueens(boolean color) {
 		Vector<Queen> tempqueens = board.getQueens();
@@ -203,7 +213,7 @@ public class RandomAI extends ArtificialIntelligence {
 
 	private Point shoot() {
 		Point target = shootLocations.get((int) (Math.random() * shootLocations.size()));
-		
+
 		return target;
 	}
 
