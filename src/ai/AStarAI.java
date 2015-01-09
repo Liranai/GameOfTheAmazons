@@ -13,7 +13,7 @@ import ai.search.NodeComparator;
 public class AStarAI extends ArtificialIntelligence {
 
 	public static final int ITERATIONS = 150;
-	public static final int PRIMARY_NODES = 50;
+	public static final int PRIMARY_NODES = 100;
 
 	public AStarAI(boolean color) {
 		super(color);

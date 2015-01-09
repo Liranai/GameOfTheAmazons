@@ -43,7 +43,7 @@ public class AStarNode {
 
 		f = g + h + (Math.random() / 1000.0);
 		if (counterMove != null) {
-			f = f + (counterMove.getF() / 10);
+			f = f + (counterMove.getF() / 2.0);
 		}
 	}
 

@@ -1,8 +1,8 @@
 import gui.InfoPanel;
 import logic.AmazonLogic;
-import ai.AStarThreeAI;
-import ai.AStarTwoAI;
+import ai.AStarAI;
 import ai.ArtificialIntelligence;
+import ai.mcts2;
 
 public class Main {
 
@@ -11,8 +11,8 @@ public class Main {
 	public static void main(String[] args) {
 
 		InfoPanel panel = new InfoPanel();
-		ArtificialIntelligence selectedAI = new AStarTwoAI(false);
-		ArtificialIntelligence selectedAI2 = new AStarThreeAI(true);
+		ArtificialIntelligence selectedAI = new AStarAI(false);
+		ArtificialIntelligence selectedAI2 = new mcts2(true);
 
 		AmazonLogic logic = null;
 		if (selectedAI2 != null)

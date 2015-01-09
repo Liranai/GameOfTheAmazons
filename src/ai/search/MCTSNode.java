@@ -33,5 +33,6 @@ public class MCTSNode {
 	public double calculateValue(boolean color) {
 		// System.out.println(color);
 		return board.getMobility(color);
+		// return Mobility.getMobilityFeature(!color, board);
 	}
 }

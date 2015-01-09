@@ -69,6 +69,14 @@ public class AStarThreeAI extends ArtificialIntelligence {
 		return node.getMove();
 	}
 
+	private void evaluateBoard(Board board) {
+		for (int i = 0; i < board.getField().length; i++) {
+			for (int j = 0; j < board.getField()[0].length; j++) {
+
+			}
+		}
+	}
+
 	public void explore(Board board, PriorityQueue<AStarThreeNode> queue, AStarThreeNode parent) {
 		if (board.isGameOver()) {
 			return;
