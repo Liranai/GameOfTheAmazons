@@ -14,7 +14,7 @@ public class mcts2 extends ArtificialIntelligence {
 	private Vector<MCTSNode> firstChildren;
 	// private Board board;
 
-	private static int depth = 1;
+	private static int depth = 9;
 	private static int iterations = 200;
 
 	public mcts2(boolean color) {
@@ -34,9 +34,7 @@ public class mcts2 extends ArtificialIntelligence {
 	// public void update(Observable obser, Object obj) {
 	// if (((AmazonLogic) obser).isCurrentTurn() == color) {
 	// firstChildren = new Vector<MCTSNode>();
-	// Board board = ((AmazonLogic) obser).getBoard();
-	//
-	// Move move = getMove(board);
+
 	//
 	// // System.out.println("Q: " + move.getQueen().getPosition() + " T: "
 	// // + move.getTarget() + " A: " + move.getArrow());
@@ -59,23 +57,25 @@ public class mcts2 extends ArtificialIntelligence {
 		// System.out.println(board.getQueens().get(i).getPosition());
 		// }
 		fillChildren(board);
-		if(firstChildren.size() < 1500){
-			depth = 2;
-			iterations = 250;
-		}
-		if (firstChildren.size() < 750) {
-			depth = 4;
-			iterations = 400;
-
-		}
-		if (firstChildren.size() < 375) {
-			depth = 8;
-			iterations = 600;
-		}
-		if (firstChildren.size() < 150) {
-			depth = 12;
-			iterations = 1100;
-		}
+		int childrencounter = 0;
+		childrencounter = childrencounter + firstChildren.size();
+//		if(firstChildren.size() < 1500){
+//			depth = 2;
+//			iterations = 250;
+//		}
+//		if (firstChildren.size() < 750) {
+//			depth = 4;
+//			iterations = 400;
+//
+//		}
+//		if (firstChildren.size() < 375) {
+//			depth = 8;
+//			iterations = 600;
+//		}
+//		if (firstChildren.size() < 150) {
+//			depth = 12;
+//			iterations = 1100;
+//		}
 
 		if (firstChildren.size() == 1) {
 			return firstChildren.get(0).getMove();
