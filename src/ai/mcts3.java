@@ -59,7 +59,7 @@ public class mcts3 extends ArtificialIntelligence {
 		fillChildren(board);
 		int childrencounter = 0;
 		childrencounter = childrencounter + firstChildren.size();
-		if(firstChildren.size() < 1500){
+		if (firstChildren.size() < 1500) {
 			depth = 2;
 			iterations = 25;
 		}
@@ -81,7 +81,7 @@ public class mcts3 extends ArtificialIntelligence {
 			return firstChildren.get(0).getMove();
 		} else {
 			setValues();
-			
+
 			MCTSNode max = firstChildren.get(0);
 			System.out.println("-----------------------------------------");
 			for (MCTSNode node : firstChildren) {
@@ -89,7 +89,7 @@ public class mcts3 extends ArtificialIntelligence {
 					max = node;
 					System.out.println("Choose: " + firstChildren.indexOf(node));
 					System.out.println("New value: " + max.getAverage());
-					
+
 				}
 			}
 			// for (int i = 0; i < max.getBoard().getQueens().size(); i++) {
@@ -150,32 +150,29 @@ public class mcts3 extends ArtificialIntelligence {
 			}
 			for (int j = 0; j < iterations; j++) {
 				// System.out.println("iteration number " + j);
-				firstChildren.get(i).addToAverage(MCTSSearch(firstChildren.get(i), !color));
+				firstChildren.get(i).addToAverage(MCTSSearch(firstChildren.get(i), !color, 0.0));
 			}
 		}
 		System.out.print("\n");
 	}
 
-	public double MCTSSearch(MCTSNode root, boolean turn) {
+	public double MCTSSearch(MCTSNode root, boolean turn, double result) {
 
-			double result = 0.0;
-			if (root.getBoard().isGameOver() != true) {
-				MCTSNode newNode = randomMove(root, turn);
-				result = MCTSSearch(newNode,  !turn);
+		// System.out.println(result);
+
+		if (root.getBoard().isGameOver()) {
+			if (root.getBoard().getNumberOfMoves(!color) == 0) {
+				return 1000.0;
 			} else {
-				//root.getBoard().printBoard();
-				if(root.getBoard().getMobility(!color) == 0){
-					result = 1000;
-				}else{
-					//root.getBoard().printBoard();
-					result = 1;
-				}
+				return 1.0;
 			}
-			//System.out.println(result);
-			return result;
+		} else {
+			MCTSNode newNode = randomMove(root, turn);
+			return result = MCTSSearch(newNode, !turn, result);
+		}
 	}
 
-	// TODO: fix; somehow shooting OUTSIDE of board.
+	// TODO: optimize this, way too slow.
 	public MCTSNode randomMove(MCTSNode root, boolean turn) {
 		Random rand = new Random(System.currentTimeMillis());
 		Vector<Move> moves = new Vector<Move>();
@@ -221,5 +218,10 @@ public class mcts3 extends ArtificialIntelligence {
 			// System.out.println(moves.size());
 			return null;
 		}
+	}
+
+	@Override
+	public String getName() {
+		return "MCTS";
 	}
 }

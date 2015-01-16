@@ -97,6 +97,29 @@ public class Board {
 		}
 	}
 
+	public double getNumberOfMoves(boolean colour) {
+		int colourMoves = 0;
+		for (Queen queen : queens) {
+			if (queen.isColor() == colour) {
+				int movement = 0;
+
+				for (int i = 0; i < DIRECTIONS.length; i++) {
+					Point p = new Point(queen.getPosition().x, queen.getPosition().y);
+					while (p.x >= 0 && p.y >= 0 && p.x < 10 && p.y < 10) {
+						p.translate(DIRECTIONS[i][0], DIRECTIONS[i][1]);
+						if (this.isEmpty(p)) {
+							movement++;
+						} else {
+							break;
+						}
+					}
+				}
+				colourMoves += movement;
+			}
+		}
+		return colourMoves;
+	}
+
 	public void printBoard() {
 		for (int i = 0; i < field.length; i++) {
 			for (int j = 0; j < field[0].length; j++) {

@@ -14,8 +14,10 @@ public class mcts2 extends ArtificialIntelligence {
 	private Vector<MCTSNode> firstChildren;
 	// private Board board;
 
-	private static int depth = 1;
-	private static int iterations = 200;
+	public static int DEPTH = 1;
+	public static int ITERATIONS = 200;
+
+	private int nodes;
 
 	public mcts2(boolean color) {
 		super(color);
@@ -92,22 +94,22 @@ public class mcts2 extends ArtificialIntelligence {
 		fillChildren(board);
 		int childrencounter = 0;
 		childrencounter = childrencounter + firstChildren.size();
-		if(firstChildren.size() < 1500){
-			depth = 2;
-			iterations = 250;
+		if (firstChildren.size() < 1500) {
+			DEPTH = 2;
+			ITERATIONS = 250;
 		}
 		if (firstChildren.size() < 750) {
-			depth = 4;
-			iterations = 400;
+			DEPTH = 4;
+			ITERATIONS = 400;
 
 		}
 		if (firstChildren.size() < 375) {
-			depth = 8;
-			iterations = 600;
+			DEPTH = 8;
+			ITERATIONS = 600;
 		}
 		if (firstChildren.size() < 150) {
-			depth = 12;
-			iterations = 1100;
+			DEPTH = 12;
+			ITERATIONS = 1100;
 		}
 
 		if (firstChildren.size() == 1) {
@@ -198,7 +200,7 @@ public class mcts2 extends ArtificialIntelligence {
 				} else {
 					result = root.calculateValue(!turn);
 				}
-				
+
 				MCTSNode newNode = randomMove(root, turn);
 				result = MCTSSearch(newNode, g - 1, !turn);
 			} else {
@@ -211,11 +213,11 @@ public class mcts2 extends ArtificialIntelligence {
 			}
 			return result;
 		} else {
-			if (g==0){
+			if (g == 0) {
 				g++;
 			}
 			// System.out.println("root was null");
-			return -99 + 1/g;
+			return -99 + 1 / g;
 		}
 	}
 
