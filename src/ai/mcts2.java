@@ -22,10 +22,43 @@ public class mcts2 extends ArtificialIntelligence {
 	}
 
 	@Override
+	public String getName() {
+		return "MCTS";
+	}
+
+	@Override
 	public Move getMove(Board board) {
+		long time = System.currentTimeMillis();
+		nodes = 0;
 		firstChildren = new Vector<MCTSNode>();
 
 		Move move = findMove(board);
+
+		long dt = System.currentTimeMillis() - time;
+
+		if (super.MIN_TIME == 0) {
+			super.MIN_TIME = dt;
+			super.MAX_TIME = dt;
+			super.MIN_NODES = nodes;
+			super.MAX_NODES = nodes;
+		} else {
+			if (dt < super.MIN_TIME) {
+				super.MIN_TIME = dt;
+			}
+			if (dt > super.MAX_TIME) {
+				super.MAX_TIME = dt;
+			}
+			if (nodes < super.MIN_NODES) {
+				super.MIN_NODES = nodes;
+			}
+			if (nodes > super.MAX_NODES) {
+				super.MAX_NODES = nodes;
+			}
+		}
+
+		super.MOVES++;
+		super.AVG_TIME += dt;
+		super.AVG_NODES += nodes;
 
 		return move;
 	}
@@ -86,8 +119,9 @@ public class mcts2 extends ArtificialIntelligence {
 			for (MCTSNode node : firstChildren) {
 				if (max.getAverage() < node.getAverage()) {
 					max = node;
-					System.out.println("Choose: " + firstChildren.indexOf(node));
-					System.out.println("New value: " + max.getAverage());
+					// System.out.println("Choose: " +
+					// firstChildren.indexOf(node));
+					// System.out.println("New value: " + max.getAverage());
 				}
 			}
 			// for (int i = 0; i < max.getBoard().getQueens().size(); i++) {
@@ -136,30 +170,30 @@ public class mcts2 extends ArtificialIntelligence {
 	public void setValues() {
 
 		System.out.println(firstChildren.size());
-		System.out.println("depth = " + depth);
-		System.out.println("iterations = " + iterations);
+		System.out.println("depth = " + DEPTH);
+		System.out.println("iterations = " + ITERATIONS);
 		for (int i = 0; i < firstChildren.size(); i++) {
 			// System.out.println("child number " + i);
-			if (firstChildren.size() > 50) {
-				if (i % (firstChildren.size() / 50) == 0) {
-					System.out.print(".");
-				}
-			} else {
-				System.out.print(".");
-			}
-			for (int j = 0; j < iterations; j++) {
+			// if (firstChildren.size() > 50) {
+			// if (i % (firstChildren.size() / 50) == 0) {
+			// System.out.print(".");
+			// }
+			// } else {
+			// System.out.print(".");
+			// }
+			for (int j = 0; j < ITERATIONS; j++) {
 				// System.out.println("iteration number " + j);
-				firstChildren.get(i).addToAverage(MCTSSearch(firstChildren.get(i), depth, !color));
+				firstChildren.get(i).addToAverage(MCTSSearch(firstChildren.get(i), DEPTH, !color));
 			}
 		}
-		System.out.print("\n");
+		// System.out.print("\n");
 	}
 
 	public double MCTSSearch(MCTSNode root, int g, boolean turn) {
 		if (root != null) {
 			double result = 0.0;
 			if (g != 0) {
-				if (depth % 2 == 0) {
+				if (DEPTH % 2 == 0) {
 					result = root.calculateValue(turn);
 				} else {
 					result = root.calculateValue(!turn);
@@ -168,7 +202,7 @@ public class mcts2 extends ArtificialIntelligence {
 				MCTSNode newNode = randomMove(root, turn);
 				result = MCTSSearch(newNode, g - 1, !turn);
 			} else {
-				if (depth % 2 == 0) {
+				if (DEPTH % 2 == 0) {
 					result = root.calculateValue(turn);
 				} else {
 					result = root.calculateValue(!turn);

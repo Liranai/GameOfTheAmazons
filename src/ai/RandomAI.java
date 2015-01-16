@@ -18,6 +18,10 @@ public class RandomAI extends ArtificialIntelligence {
 		super(color);
 	}
 
+	public String getName() {
+		return "Random";
+	}
+
 	public Move findMove() {
 		getQueens(color);
 		Queen chosenQueen = fillMoveLocations();

@@ -12,8 +12,6 @@ import java.util.Observer;
 
 import javax.swing.JPanel;
 
-import logic.AmazonLogic;
-
 public class InfoPanel extends JPanel implements Observer {
 
 	private static final long serialVersionUID = -7102795064597828847L;
@@ -44,7 +42,7 @@ public class InfoPanel extends JPanel implements Observer {
 
 	@Override
 	public void update(Observable obser, Object obj) {
-		currentTurn = ((AmazonLogic) obser).isCurrentTurn();
+		// currentTurn = ((AmazonLogic) obser).isCurrentTurn();
 		this.repaint();
 	}
 }

@@ -12,8 +12,10 @@ import ai.search.NodeComparator;
 
 public class AStarAI extends ArtificialIntelligence {
 
-	public static final int ITERATIONS = 150;
-	public static final int PRIMARY_NODES = 100;
+	public static final int ITERATIONS = 100;
+	public static final int PRIMARY_NODES = 50;
+
+	private long nodes = 0;
 
 	public AStarAI(boolean color) {
 		super(color);
@@ -21,7 +23,14 @@ public class AStarAI extends ArtificialIntelligence {
 	}
 
 	@Override
+	public String getName() {
+		return "AStar";
+	}
+
+	@Override
 	public Move getMove(Board board) {
+		long time = System.currentTimeMillis();
+		nodes = 0;
 		PriorityQueue<AStarNode> queue = new PriorityQueue<AStarNode>(10, new NodeComparator());
 
 		// System.out.println("Running: AStar2.0");
@@ -35,6 +44,7 @@ public class AStarAI extends ArtificialIntelligence {
 		int i = 0;
 		while (queue.size() > 2 && i < AStarTwoAI.ITERATIONS) {
 
+			nodes += queue.size();
 			Vector<AStarNode> list = new Vector<AStarNode>();
 			if (queue.size() >= AStarAI.PRIMARY_NODES) {
 				for (int j = 0; j < AStarAI.PRIMARY_NODES; j++) {
@@ -58,13 +68,13 @@ public class AStarAI extends ArtificialIntelligence {
 			}
 
 			AStarNode tNode = queue.poll();
-			if (AStarTwoAI.ITERATIONS > 50) {
-				if (i % (AStarTwoAI.ITERATIONS / 50) == 0) {
-					System.out.print(".");
-				}
-			} else {
-				System.out.print(".");
-			}
+			// if (AStarTwoAI.ITERATIONS > 50) {
+			// if (i % (AStarTwoAI.ITERATIONS / 50) == 0) {
+			// System.out.print(".");
+			// }
+			// } else {
+			// System.out.print(".");
+			// }
 			explore(tNode.getAugmentedBoard(), queue, tNode);
 			i++;
 		}
@@ -74,8 +84,37 @@ public class AStarAI extends ArtificialIntelligence {
 			node = node.getParent();
 		}
 
-		System.out.println("\n For: " + (color ? " White" : " Black") + " nodes: " + queue.size() + " value: " + node.getF());
-		System.out.println(node.getMove().getQueen().getPosition() + " to " + node.getMove().getTarget() + " targeting " + node.getMove().getArrow());
+		// System.out.println("\n For: " + (color ? " White" : " Black") +
+		// " nodes: " + queue.size() + " value: " + node.getF());
+		// System.out.println(node.getMove().getQueen().getPosition() + " to " +
+		// node.getMove().getTarget() + " targeting " +
+		// node.getMove().getArrow());
+
+		long dt = System.currentTimeMillis() - time;
+
+		if (super.MIN_TIME == 0) {
+			super.MIN_TIME = dt;
+			super.MAX_TIME = dt;
+			super.MIN_NODES = nodes;
+			super.MAX_NODES = nodes;
+		} else {
+			if (dt < super.MIN_TIME) {
+				super.MIN_TIME = dt;
+			}
+			if (dt > super.MAX_TIME) {
+				super.MAX_TIME = dt;
+			}
+			if (nodes < super.MIN_NODES) {
+				super.MIN_NODES = nodes;
+			}
+			if (nodes > super.MAX_NODES) {
+				super.MAX_NODES = nodes;
+			}
+		}
+
+		super.MOVES++;
+		super.AVG_TIME += dt;
+		super.AVG_NODES += nodes;
 
 		return node.getMove();
 	}
@@ -152,6 +191,8 @@ public class AStarAI extends ArtificialIntelligence {
 				}
 			}
 		}
+
+		nodes += queue.size();
 
 		return queue.poll();
 	}

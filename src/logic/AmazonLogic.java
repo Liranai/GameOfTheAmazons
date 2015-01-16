@@ -1,11 +1,16 @@
 package logic;
 
+import experimenting.AutomatedRun;
 import gui.AmazonUI;
 import gui.InfoPanel;
 
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.Vector;
 
 import lombok.Getter;
@@ -15,12 +20,13 @@ import model.GameObject;
 import model.Move;
 import model.Queen;
 import ai.ArtificialIntelligence;
+import ai.mcts2;
 
 @Getter
 public class AmazonLogic implements MouseListener, Runnable {
 
 	private Board board;
-	private boolean running, moved;
+	private boolean running, moved, winner = false;
 	private AmazonUI GUI;
 	private Queen selectedQueen;
 	private Point target;
@@ -39,6 +45,16 @@ public class AmazonLogic implements MouseListener, Runnable {
 		running = true;
 		moved = true;
 		GUI = new AmazonUI(board, panel, this);
+	}
+
+	public AmazonLogic(ArtificialIntelligence... selectedAIs) {
+		AIs = new Vector<ArtificialIntelligence>();
+		for (ArtificialIntelligence AI : selectedAIs)
+			AIs.add(AI);
+		constructBoard();
+
+		running = true;
+		moved = true;
 	}
 
 	public void constructBoard() {
@@ -76,6 +92,101 @@ public class AmazonLogic implements MouseListener, Runnable {
 					e.printStackTrace();
 				}
 			}
+		}
+
+		for (ArtificialIntelligence AI : AIs) {
+			AI.calculateAverage();
+		}
+
+		exportData(AutomatedRun.FILE_NAME);
+	}
+
+	public void exportMove(String name) {
+		try {
+			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(name + ".txt", true)));
+
+			if (board.getArrows().size() == 0) {
+				writer.write("");
+			}
+
+		} catch (IOException e) {
+		}
+	}
+
+	public void exportData(String name) {
+		System.out.println("Writing file");
+
+		try {
+			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(name + ".txt", true)));
+
+			if (AutomatedRun.GAME_NUMBER == 0) {
+
+				writer.write("White");
+
+				for (ArtificialIntelligence AI : AIs) {
+					if (AI.isColor() == true) {
+						writer.write(": " + AI.getName());
+					}
+				}
+
+				writer.write("\tBlack");
+
+				for (ArtificialIntelligence AI : AIs) {
+					if (AI.isColor() == false) {
+						writer.write(": " + AI.getName());
+					}
+				}
+
+				writer.write("\tdepth: " + mcts2.DEPTH);
+				writer.write("\titerations: " + mcts2.ITERATIONS);
+				writer.newLine();
+
+				writer.write("Num\tWin\tMin_time_W\tAvg_time_W\tMax_time_W\tMin_time_B\tAvg_time_B\tMax_time_B\tMoves_W\tMoves_B\tMin_nodes_W\tAvg_nodes_W\tMax_nodes_W\tMin_nodes_B\tAvg_nodes_B\tMax_nodes_B");
+			}
+			writer.newLine();
+
+			writer.write(AutomatedRun.GAME_NUMBER + 1 + "\t");
+			writer.write(winner ? "W\t" : "B\t");
+
+			for (ArtificialIntelligence AI : AIs) {
+				if (AI.isColor() == true) {
+					writer.write(AI.getMIN_TIME() + "\t" + AI.getAVG_TIME() + "\t" + AI.getMAX_TIME() + "\t");
+				}
+			}
+
+			for (ArtificialIntelligence AI : AIs) {
+				if (AI.isColor() == false) {
+					writer.write(AI.getMIN_TIME() + "\t" + AI.getAVG_TIME() + "\t" + AI.getMAX_TIME() + "\t");
+				}
+			}
+
+			for (ArtificialIntelligence AI : AIs) {
+				if (AI.isColor() == true) {
+					writer.write(AI.getMOVES() + "\t");
+				}
+			}
+
+			for (ArtificialIntelligence AI : AIs) {
+				if (AI.isColor() == false) {
+					writer.write(AI.getMOVES() + "\t");
+				}
+			}
+
+			for (ArtificialIntelligence AI : AIs) {
+				if (AI.isColor() == true) {
+					writer.write(AI.getMIN_NODES() + "\t" + AI.getAVG_NODES() + "\t" + AI.getMAX_NODES() + "\t");
+				}
+			}
+
+			for (ArtificialIntelligence AI : AIs) {
+				if (AI.isColor() == false) {
+					writer.write(AI.getMIN_NODES() + "\t" + AI.getAVG_NODES() + "\t" + AI.getMAX_NODES() + "\t");
+				}
+			}
+
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -165,8 +276,10 @@ public class AmazonLogic implements MouseListener, Runnable {
 			// board.printBoard();
 			moved = true;
 		}
-		GUI.validate();
-		GUI.repaint();
+		if (GUI != null) {
+			GUI.validate();
+			GUI.repaint();
+		}
 
 		// System.out.println("Board repainted");
 		if (checkMoves()) {
@@ -197,6 +310,7 @@ public class AmazonLogic implements MouseListener, Runnable {
 		if (whiteDead || blackDead) {
 			if (currentTurn && blackDead) {
 				System.out.println("White won!");
+				winner = true;
 				// Black lost
 			} else if (currentTurn && whiteDead) {
 				System.out.println("Black won!");
@@ -206,6 +320,7 @@ public class AmazonLogic implements MouseListener, Runnable {
 				// White lost
 			} else if (!currentTurn && blackDead) {
 				System.out.println("White won!");
+				winner = true;
 				// Black lost
 			}
 			return true;

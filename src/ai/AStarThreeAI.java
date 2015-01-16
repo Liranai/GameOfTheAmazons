@@ -15,31 +15,25 @@ public class AStarThreeAI extends ArtificialIntelligence {
 
 	public static final int ITERATIONS = 150;
 
-	private Vector<Pair<Queen, Integer>>[][] datamap;
-
 	public AStarThreeAI(boolean color) {
 		super(color);
 		// TODO Auto-generated constructor stub
 
-		datamap = (Vector<Pair<Queen, Integer>>[][]) new Object[10][10];
 	}
 
 	@Override
 	public Move getMove(Board board) {
 		PriorityQueue<AStarThreeNode> queue = new PriorityQueue<AStarThreeNode>(10, new NodeThreeComparator());
-
-		evaluateBoard(board);
-
-		Queen queen = findQueen(board);
-		System.out.println("AStar3.0  -  Targeting: " + queen.getPosition());
-
-		Move move = findMove(board, queen);
-
-		// explore(board.clone(), queue, null);
 		//
+		// Queen queen = findQueen(board);
+		// System.out.println("AStar3.0  -  Targeting: " + queen.getPosition());
+		//
+		// explore(board.clone(), queue, null);
 		// if (queue.size() == 0) {
 		// return null;
 		// }
+		//
+		// Move move = findMove(board, queen);
 		//
 		// int i = 0;
 		// while (queue.size() > 2 && i < AStarThreeAI.ITERATIONS) {
@@ -65,19 +59,40 @@ public class AStarThreeAI extends ArtificialIntelligence {
 		// System.out.println(node.getMove().getQueen().getPosition() + " to " +
 		// node.getMove().getTarget() + " targeting " +
 		// node.getMove().getArrow());
-
-		return node.getMove();
+		//
+		// return move;
+		return null;
 	}
 
-	private void evaluateBoard(Board board) {
-		for (int i = 0; i < board.getField().length; i++) {
-			for (int j = 0; j < board.getField()[0].length; j++) {
-
+	private Queen findQueen(Board board) {
+		Vector<Pair<Queen, Integer>> list = new Vector<Pair<Queen, Integer>>();
+		for (Queen queen : board.getQueens()) {
+			if (queen.isColor() != color) {
+				int territory = 0;
+				Point p = new Point(queen.getPosition().x, queen.getPosition().y);
+				for (int i = 1; i < 5; i++) {
+					for (int j = 0; j < Board.DIRECTIONS.length; j++) {
+						if (board.isEmpty(new Point(p.x + (Board.DIRECTIONS[j][0] * i), p.y + (Board.DIRECTIONS[j][1] * i))))
+							territory++;
+					}
+				}
+				list.add(new Pair<Queen, Integer>(queen, territory));
 			}
 		}
+		Pair<Queen, Integer> pair = list.get(0);
+		for (Pair<Queen, Integer> pairs : list) {
+			if (pairs.getSecond() < pair.getSecond()) {
+				pair = pairs;
+			}
+		}
+		return pair.getFirst();
 	}
 
-	public void explore(Board board, PriorityQueue<AStarThreeNode> queue, AStarThreeNode parent) {
+	private Move findMove(Board board, Queen queen) {
+		return null;
+	}
+
+	public void explore(Board board, PriorityQueue<AStarThreeNode> queue, AStarThreeNode parent, Queen target) {
 		if (board.isGameOver()) {
 			return;
 		}
@@ -100,7 +115,7 @@ public class AStarThreeAI extends ArtificialIntelligence {
 										AStarThreeNode node = new AStarThreeNode(move.clone(), board.clone());
 										node.setParent(parent);
 										// node.setCounterMove(getCounterMove(node));
-										node.evaluate();
+										// node.evaluate(target);
 										queue.add(node);
 									} else {
 										break;
@@ -151,5 +166,10 @@ public class AStarThreeAI extends ArtificialIntelligence {
 		}
 
 		return queue.poll();
+	}
+
+	@Override
+	public String getName() {
+		return "AStar version 3";
 	}
 }

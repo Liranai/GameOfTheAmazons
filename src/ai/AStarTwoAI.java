@@ -19,7 +19,14 @@ public class AStarTwoAI extends ArtificialIntelligence {
 	}
 
 	@Override
+	public String getName() {
+		return "AStar";
+	}
+
+	@Override
 	public Move getMove(Board board) {
+		long time = System.currentTimeMillis();
+		long nodes = 0;
 		PriorityQueue<AStarTwoNode> queue = new PriorityQueue<AStarTwoNode>(10, new NodeTwoComparator());
 
 		// System.out.println("Running: AStar2.0");
@@ -49,8 +56,37 @@ public class AStarTwoAI extends ArtificialIntelligence {
 			node = node.getParent();
 		}
 
-		System.out.println("\n For: " + (color ? " White" : " Black") + " nodes: " + queue.size() + " value: " + node.getF());
-		System.out.println(node.getMove().getQueen().getPosition() + " to " + node.getMove().getTarget() + " targeting " + node.getMove().getArrow());
+		// System.out.println("\n For: " + (color ? " White" : " Black") +
+		// " nodes: " + queue.size() + " value: " + node.getF());
+		// System.out.println(node.getMove().getQueen().getPosition() + " to " +
+		// node.getMove().getTarget() + " targeting " +
+		// node.getMove().getArrow());
+
+		long dt = System.currentTimeMillis() - time;
+
+		if (super.MIN_TIME == 0) {
+			super.MIN_TIME = dt;
+			super.MAX_TIME = dt;
+			super.MIN_NODES = nodes;
+			super.MAX_NODES = nodes;
+		} else {
+			if (dt < super.MIN_TIME) {
+				super.MIN_TIME = dt;
+			}
+			if (dt > super.MAX_TIME) {
+				super.MAX_TIME = dt;
+			}
+			if (nodes < super.MIN_NODES) {
+				super.MIN_NODES = nodes;
+			}
+			if (nodes > super.MAX_NODES) {
+				super.MAX_NODES = nodes;
+			}
+		}
+
+		super.MOVES++;
+		super.AVG_TIME++;
+		super.AVG_NODES += nodes;
 
 		return node.getMove();
 	}
