@@ -4,6 +4,7 @@ import ai.AStarAI;
 import ai.ArtificialIntelligence;
 import ai.RandomAI;
 import ai.mcts2;
+import ai.mcts3;
 
 public class Main {
 
@@ -12,8 +13,8 @@ public class Main {
 	public static void main(String[] args) {
 
 		InfoPanel panel = new InfoPanel();
-		ArtificialIntelligence selectedAI = new mcts2(false);
-		ArtificialIntelligence selectedAI2 = new AStarAI(true);
+		ArtificialIntelligence selectedAI = new mcts3(true);
+		ArtificialIntelligence selectedAI2 = new AStarAI(false);
 
 		AmazonLogic logic = null;
 		if (selectedAI2 != null)
