@@ -13,8 +13,8 @@ public class Main {
 	public static void main(String[] args) {
 
 		InfoPanel panel = new InfoPanel();
-		ArtificialIntelligence selectedAI = new mcts3(true);
-		ArtificialIntelligence selectedAI2 = new AStarAI(false);
+		ArtificialIntelligence selectedAI = new mcts3(false);
+		ArtificialIntelligence selectedAI2 = new AStarAI(true);
 
 		AmazonLogic logic = null;
 		if (selectedAI2 != null)

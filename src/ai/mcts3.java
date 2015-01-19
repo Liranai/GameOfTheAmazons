@@ -15,7 +15,7 @@ public class mcts3 extends ArtificialIntelligence {
 	// private Board board;
 
 	private static int depth = 1;
-	private static int iterations = 10;
+	private static int iterations = 25;
 
 	public mcts3(boolean color) {
 		super(color);
@@ -60,21 +60,16 @@ public class mcts3 extends ArtificialIntelligence {
 		int childrencounter = 0;
 		childrencounter = childrencounter + firstChildren.size();
 		if (firstChildren.size() < 1500) {
-			depth = 2;
-			iterations = 25;
+			iterations = 50;
 		}
 		if (firstChildren.size() < 750) {
-			depth = 4;
-			iterations = 40;
-
+			iterations = 200;
 		}
 		if (firstChildren.size() < 375) {
-			depth = 8;
-			iterations = 60;
+			iterations = 500;
 		}
 		if (firstChildren.size() < 150) {
-			depth = 12;
-			iterations = 110;
+			iterations = 1000;
 		}
 
 		if (firstChildren.size() == 1) {
@@ -85,13 +80,14 @@ public class mcts3 extends ArtificialIntelligence {
 			MCTSNode max = firstChildren.get(0);
 			
 			for (MCTSNode node : firstChildren) {
-				System.out.println(firstChildren.get(0).getAverage());
+				//System.out.println(firstChildren.get(0).getAverage());
 				if (max.getAverage() < node.getAverage()) {
 					max = node;
 					System.out.println("Choose: " + firstChildren.indexOf(node));
 					System.out.println("New value: " + max.getAverage());
 
 				}
+				
 			}
 			// for (int i = 0; i < max.getBoard().getQueens().size(); i++) {
 			// System.out.println(max.getBoard().getQueens().get(i).getPosition());
@@ -163,9 +159,9 @@ public class mcts3 extends ArtificialIntelligence {
 
 		if (root.getBoard().isGameOver()) {
 			if (root.getBoard().getNumberOfMoves(!color) == 0) {
-				return 1000.0;
+				return 1;
 			} else {
-				return 1.0;
+				return 0;
 			}
 		} else {
 			MCTSNode newNode = randomMove(root, turn);

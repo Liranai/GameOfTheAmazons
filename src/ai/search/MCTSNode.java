@@ -31,7 +31,7 @@ public class MCTSNode {
 	}
 
 	public double calculateValue(boolean color) {
-		 System.out.println("this should not pop up");
+		 
 		return board.getMobility(color);
 		// return Mobility.getMobilityFeature(!color, board);
 	}

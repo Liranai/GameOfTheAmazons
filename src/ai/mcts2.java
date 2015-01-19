@@ -96,20 +96,20 @@ public class mcts2 extends ArtificialIntelligence {
 		childrencounter = childrencounter + firstChildren.size();
 		if (firstChildren.size() < 1500) {
 			DEPTH = 2;
-			ITERATIONS = 250;
+			ITERATIONS = 300;
 		}
 		if (firstChildren.size() < 750) {
 			DEPTH = 4;
-			ITERATIONS = 400;
+			ITERATIONS = 500;
 
 		}
 		if (firstChildren.size() < 375) {
 			DEPTH = 8;
-			ITERATIONS = 600;
+			ITERATIONS = 800;
 		}
 		if (firstChildren.size() < 150) {
 			DEPTH = 12;
-			ITERATIONS = 1100;
+			ITERATIONS = 1300;
 		}
 
 		if (firstChildren.size() == 1) {
