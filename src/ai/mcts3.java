@@ -83,8 +83,9 @@ public class mcts3 extends ArtificialIntelligence {
 			setValues();
 
 			MCTSNode max = firstChildren.get(0);
-			System.out.println("-----------------------------------------");
+			
 			for (MCTSNode node : firstChildren) {
+				System.out.println(firstChildren.get(0).getAverage());
 				if (max.getAverage() < node.getAverage()) {
 					max = node;
 					System.out.println("Choose: " + firstChildren.indexOf(node));
