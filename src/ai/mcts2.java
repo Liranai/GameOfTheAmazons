@@ -94,6 +94,8 @@ public class mcts2 extends ArtificialIntelligence {
 		fillChildren(board);
 		int childrencounter = 0;
 		childrencounter = childrencounter + firstChildren.size();
+		DEPTH = 1;
+		ITERATIONS = 200;
 		if (firstChildren.size() < 1500) {
 			DEPTH = 2;
 			ITERATIONS = 300;
