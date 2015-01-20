@@ -13,7 +13,6 @@ public class AStarNode {
 	private Status status = Status.unexplored;
 	@Setter
 	private AStarNode parent;
-	@Setter
 	private AStarNode counterMove;
 	private Move move;
 	private Board augmentedBoard, board;
@@ -45,6 +44,11 @@ public class AStarNode {
 		if (counterMove != null) {
 			f = f + (counterMove.getF() / 2.0);
 		}
+	}
+
+	public void setCounterMove(AStarNode node) {
+		this.counterMove = node;
+		// augmentedBoard.move(counterMove.getMove());
 	}
 
 	@Override

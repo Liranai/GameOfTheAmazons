@@ -14,8 +14,8 @@ public class AutomatedRun {
 
 	public static int GAME_NUMBER = 0;
 
-	public static final int NUMBER_OF_EXPERIMENTS = 5;
-	public static final String FILE_NAME = "AStar_AStar_100_extra_data";
+	public static final int NUMBER_OF_EXPERIMENTS = 25;
+	public static final String FILE_NAME = "MCTS2_vs_AStar_25";
 	public static final int MCTS_DEPTH = 9;
 	public static final int MCTS_ITERATIONS = 300;
 
@@ -27,14 +27,14 @@ public class AutomatedRun {
 			e.printStackTrace();
 		}
 
-		mcts2.DEPTH = MCTS_DEPTH;
-		mcts2.ITERATIONS = MCTS_ITERATIONS;
+		// mcts2.DEPTH = MCTS_DEPTH;
+		// mcts2.ITERATIONS = MCTS_ITERATIONS;
 
 		for (int i = 0; i < NUMBER_OF_EXPERIMENTS; i++) {
 			GAME_NUMBER = i;
 			System.out.println("Running experiment " + (GAME_NUMBER + 1));
 
-			ArtificialIntelligence AI1 = new AStarAI(true);
+			ArtificialIntelligence AI1 = new mcts2(true);
 			ArtificialIntelligence AI2 = new AStarAI(false);
 
 			AmazonLogic logic = new AmazonLogic(AI1, AI2);

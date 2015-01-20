@@ -51,6 +51,8 @@ public class AStarTwoAI extends ArtificialIntelligence {
 			i++;
 		}
 
+		System.out.println();
+
 		AStarTwoNode node = queue.peek();
 		while (node.getParent() != null) {
 			node = node.getParent();
