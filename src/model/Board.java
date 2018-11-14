@@ -12,7 +12,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.Vector;
 
 import lombok.Getter;
-import lombok.Setter;
+import lombok.Setter; //just testing
 
 @Getter
 public class Board {
